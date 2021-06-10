@@ -9,18 +9,12 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private Camera cam;
 
-    [SerializeField]
-    private Transform CameraMountPoint;
-
     private Transform cameraTransform;
 
     [SerializeField]
     private NavMeshAgent agent;
 
     [SerializeField]
-    private GameObject myCanva;
-
-     [SerializeField]
     private Rigidbody _rb;
 
     [ClientRpc]
@@ -35,9 +29,6 @@ public class PlayerController : NetworkBehaviour
         {
             cam = Camera.main;
             cameraTransform = cam.gameObject.transform;  //Find main camera which is part of the scene instead of the prefab
-            cameraTransform.parent = CameraMountPoint.transform;  //Make the camera a child of the mount point
-            cameraTransform.position = CameraMountPoint.transform.position;  //Set position/rotation same as the mount point
-            cameraTransform.rotation = CameraMountPoint.transform.rotation;
         }
         if(!isLocalPlayer)
         {

@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: 131501495401080662}
   - component: {fileID: 131501495401080657}
   - component: {fileID: 3273574245093948074}
+  - component: {fileID: 5807963203945844944}
+  - component: {fileID: 5062334263613802591}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -34,8 +36,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.75, z: -12.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 131501495681038413}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -117,7 +118,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   cam: {fileID: 0}
-  CameraMountPoint: {fileID: 131501495681038413}
+  CameraMountPoint: {fileID: 0}
   agent: {fileID: 131501495401080662}
   myCanva: {fileID: 0}
   _rb: {fileID: 131501495401080657}
@@ -147,7 +148,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 131501495401080656}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.1
   m_Speed: 5
   m_Acceleration: 100
   avoidancePriority: 50
@@ -174,8 +175,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  m_Constraints: 4
+  m_CollisionDetection: 1
 --- !u!114 &3273574245093948074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -197,33 +198,27 @@ MonoBehaviour:
   compressRotation: 0
   interpolateScale: 1
   syncScale: 1
---- !u!1 &131501495681038412
-GameObject:
+--- !u!114 &5807963203945844944
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 131501495681038413}
-  m_Layer: 0
-  m_Name: CamMountPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &131501495681038413
-Transform:
+  m_GameObject: {fileID: 131501495401080656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc89fb8ffc723c548b2681809e25d7b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5062334263613802591
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 131501495681038412}
-  m_LocalRotation: {x: 0.616657, y: -0, z: -0, w: 0.787232}
-  m_LocalPosition: {x: 0, y: 21.63, z: -5.03}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 131501495401080664}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 76.145, y: 0, z: 0}
+  m_GameObject: {fileID: 131501495401080656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d163ad0b9609f4e4a98809f2becd0469, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
