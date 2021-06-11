@@ -23,11 +23,7 @@ public class CameraMovement : MonoBehaviour
     public float rotationsSpeed = 5.0f;
 
     [SerializeField]
-    private int _boundary;
-    [SerializeField]
-    private int _speed;
-    [SerializeField]
-    private float _freeCameraSpeed;
+    private CameraHolder _partnerCameraHolder;
 
     void LateUpdate()
     {
@@ -35,7 +31,7 @@ public class CameraMovement : MonoBehaviour
         {
             return;
         }
-        else if(!Input.GetKey(KeyCode.Space))
+        else if(_partnerCameraHolder._freeCamEnabled == false)
         {
             if (rotateAroundPlayer && Input.GetKey(KeyCode.Mouse2))
             {

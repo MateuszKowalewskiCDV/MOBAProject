@@ -83,6 +83,7 @@ public class Outline : MonoBehaviour {
   void Awake() {
 
     // Cache renderers
+
     renderers = GetComponentsInChildren<Renderer>();
 
     // Instantiate outline materials

@@ -14,36 +14,62 @@ public class CameraHolder : MonoBehaviour
     [SerializeField]
     private CameraMovement _partner;
 
+    public bool _freeCamEnabled = false;
+
+    [SerializeField]
+    private GameObject _camChild;
+
+    [SerializeField]
+    private GameObject _camera;
+
     public void Start()
     {
         _theScreenWidth = Screen.width;
         _theScreenHeight = Screen.height;
+        _camChild.transform.position = Camera.main.transform.position;
     }
 
     void Update()
     {
-        if(Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (Input.mousePosition.x > _theScreenWidth - _boundary)
+            if (_freeCamEnabled)
             {
-                transform.position += transform.right * Time.deltaTime * _freeCameraSpeed;
+                _freeCamEnabled = false;
             }
-            if (Input.mousePosition.x < 0 + _boundary)
+            else
             {
-                transform.position -= transform.right * Time.deltaTime * _freeCameraSpeed;
-            }
-            if (Input.mousePosition.y > _theScreenHeight - _boundary)
-            {
-                transform.localPosition -= transform.forward * Time.deltaTime * _freeCameraSpeed;
-            }
-            if (Input.mousePosition.y < 0 + _boundary)
-            {
-                transform.localPosition += transform.forward * Time.deltaTime * _freeCameraSpeed;
+                _freeCamEnabled = true;
+                _camChild.transform.position = Camera.main.transform.position;
+                transform.rotation = Quaternion.Euler(transform.rotation.x, Camera.main.transform.eulerAngles.y, transform.rotation.z);
+                _camChild.transform.position = Camera.main.transform.position;
             }
         }
-        if(!Input.GetKey(KeyCode.Space))
+        if (_freeCamEnabled)
         {
-            transform.position = _partner.player.transform.position;
+            FreeCam();
+        }
+    }
+
+    void FreeCam()
+    {
+        Camera.main.transform.position = _camChild.transform.position;
+
+        if (Input.mousePosition.x > _theScreenWidth - _boundary)
+        {
+            transform.position += transform.right * Time.deltaTime * _freeCameraSpeed;
+        }
+        if (Input.mousePosition.x < 0 + _boundary)
+        {
+            transform.position -= transform.right * Time.deltaTime * _freeCameraSpeed;
+        }
+        if (Input.mousePosition.y > _theScreenHeight - _boundary)
+        {
+            transform.position += transform.forward * Time.deltaTime * _freeCameraSpeed;
+        }
+        if (Input.mousePosition.y < 0 + _boundary)
+        {
+            transform.position -= transform.forward * Time.deltaTime * _freeCameraSpeed;
         }
     }
 }

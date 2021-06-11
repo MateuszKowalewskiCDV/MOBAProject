@@ -6,6 +6,6 @@ public class WatchCam : MonoBehaviour
 {
     void Update()
     {
-        transform.rotation = Camera.main.transform.rotation;
+        transform.LookAt(Camera.main.transform);
     }
 }
