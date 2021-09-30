@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Shop
   - Enemy
+  - floor
+  - Skill1
   layers:
   - Default
   - TransparentFX

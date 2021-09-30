@@ -84,7 +84,8 @@ public class Outline : MonoBehaviour {
 
     // Cache renderers
 
-    renderers = GetComponentsInChildren<Renderer>();
+        // Tutaj zmieniłem zamiast GetComponentsInChild na GetComponent
+    renderers = GetComponents<Renderer>();
 
     // Instantiate outline materials
     outlineMaskMaterial = Instantiate(Resources.Load<Material>(@"Materials/OutlineMask"));
@@ -163,20 +164,22 @@ public class Outline : MonoBehaviour {
     // Generate smooth normals for each mesh
     var bakedMeshes = new HashSet<Mesh>();
 
-    foreach (var meshFilter in GetComponentsInChildren<MeshFilter>()) {
+    foreach (var meshFilter in GetComponentsInChildren<MeshFilter>())
+        {
 
-      // Skip duplicates
-      if (!bakedMeshes.Add(meshFilter.sharedMesh)) {
-        continue;
-      }
+            // Skip duplicates
+            if (!bakedMeshes.Add(meshFilter.sharedMesh))
+            {
+                continue;
+            }
 
-      // Serialize smooth normals
-      var smoothNormals = SmoothNormals(meshFilter.sharedMesh);
+            // Serialize smooth normals
+            var smoothNormals = SmoothNormals(meshFilter.sharedMesh);
 
-      bakeKeys.Add(meshFilter.sharedMesh);
-      bakeValues.Add(new ListVector3() { data = smoothNormals });
+            bakeKeys.Add(meshFilter.sharedMesh);
+            bakeValues.Add(new ListVector3() { data = smoothNormals });
+        }
     }
-  }
 
   void LoadSmoothNormals() {
 
