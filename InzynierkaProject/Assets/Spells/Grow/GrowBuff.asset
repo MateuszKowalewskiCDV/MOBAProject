@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a199e17e9edae3b4ba3305dd85f7cefc, type: 3}
+  m_Name: GrowBuff
+  m_EditorClassIdentifier: 
+  spellName: Grow
+  description: Grow strong! Double size and  HP for 15s!
+  manaCost: 50
+  cooldown: 60
+  sprite: {fileID: 21300000, guid: 4e0ebf4d88c7ad642b81003a8775edc6, type: 3}
+  skillType: buff
+  speed: 0
+  damage: 0
+  range: 0
+  castableOnAlly: 0
+  buffValue: 2
+  duration: 15
+  spellPrefab: {fileID: 3111408068730742980, guid: 6159cd080c34577499a1e6c338201d37, type: 3}
+  indicator: {fileID: 8961954778505008542, guid: 2c65069506971f94589e0a40fde56ddc, type: 3}

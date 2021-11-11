@@ -9,37 +9,29 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private Camera cam;
 
-    private Transform cameraTransform;
-
     [SerializeField]
     private NavMeshAgent agent;
 
     [SerializeField]
     private Rigidbody _rb;
 
-    [ClientRpc]
     void Start()
     {
         if(isLocalPlayer)
         {
+            gameObject.layer = 8;
             agent = GetComponent<NavMeshAgent>();
             agent.enabled = true;
-        }
-        if (isLocalPlayer)
-        {
+            _rb = GetComponent<Rigidbody>();
             cam = Camera.main;
-            cameraTransform = cam.gameObject.transform;  //Find main camera which is part of the scene instead of the prefab
         }
         if(!isLocalPlayer)
         {
+            gameObject.layer = 12;
             GetComponent<PlayerController>().enabled = false;
-            GetComponentInChildren<Canvas>().enabled = false;
         }
-    _rb = GetComponent<Rigidbody>();
     }
 
-
-    [ClientCallback]
     void Update()
     {
         if (Input.GetMouseButton(1))
@@ -50,6 +42,7 @@ public class PlayerController : NetworkBehaviour
             if(Physics.Raycast(ray, out hit))
             {
                 agent.SetDestination(hit.point);
+                //Instantiate(movementIndicator, hit);
             }
         }
     }

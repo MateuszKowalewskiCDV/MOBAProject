@@ -8,6 +8,9 @@ TagManager:
   - Enemy
   - floor
   - Skill1
+  - Canvas
+  - Ability
+  - ShopCanvas
   layers:
   - Default
   - TransparentFX
@@ -19,11 +22,11 @@ TagManager:
   - 
   - Player
   - Trigger
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Minimap
+  - MainCamera
+  - EnemyPlayer
+  - AllyPlayer
+  - Ability
   - 
   - 
   - 

@@ -1,0 +1,214 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+using Mirror;
+using UnityEngine.AI;
+
+public class BeingHP : NetworkBehaviour
+{
+    public GameObject _holder;
+    private NetworkConnection _nt;
+    public Rigidbody player;
+    [SerializeField]
+    private SpriteRenderer _hpBar;
+    [SerializeField]
+    private SpriteRenderer _manaBar;
+    public int maxHp;
+    public int maxMana;
+    [SyncVar]
+    public int actualHp;
+    [SyncVar]
+    public int actualMana;
+
+    [SerializeField]
+    private int _hpRegen;
+    [SerializeField]
+    private int _manaRegen;
+
+    private int _hpRegenTime = 1;
+    private int _manaRegenTime = 1;
+
+    private float hpTimer, manaTimer;
+
+    public TextMeshPro _damageIndicator, _damageIndicatorInstance;
+
+    private float startValueHP, startValueMANA;
+
+    public bool _isMob, isAttacked;
+    public MobScriptable _mob;
+
+    private Vector3 _startingPosition;
+    private NavMeshAgent _navMeshAgent;
+
+    public void Start()
+    {
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        _startingPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        if (_isMob)
+        {
+            startValueHP = _hpBar.transform.localScale.x;
+            startValueMANA = _manaBar.transform.localScale.x;
+            actualHp = _mob.hp;
+            _manaBar.gameObject.SetActive(false);
+            player = GetComponent<Rigidbody>();
+            _hpBar.color = Color.green;
+            _hpBar.transform.localScale = new Vector3(startValueHP / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);
+        }
+        else
+        {
+            startValueHP = _hpBar.transform.localScale.x;
+            startValueMANA = _manaBar.transform.localScale.x;
+            actualHp = maxHp;
+            actualMana = maxMana;
+            player = GetComponent<Rigidbody>();
+            _hpBar.color = Color.green;
+            _hpBar.transform.localScale = new Vector3(startValueHP / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);
+        }
+    }
+
+    public void Update()
+    {
+            hpTimer += Time.deltaTime;
+            manaTimer += Time.deltaTime;
+
+            if (hpTimer >= _hpRegenTime && actualHp < maxHp)
+            {
+                actualHp += _hpRegen;
+                HpColorSwitch();
+                hpTimer = 0;
+            }
+            if (manaTimer >= _manaRegenTime && actualMana < maxMana)
+            {
+                actualMana += _manaRegen;
+                _manaBar.transform.localScale = new Vector3(startValueMANA / maxMana * actualMana, _manaBar.transform.localScale.y, _manaBar.transform.localScale.z);
+                manaTimer = 0;
+            }
+    }
+
+    public int LoseHp(int loss)
+    {
+        actualHp = actualHp - loss;
+        StartCoroutine(isAttackedRecently());
+
+        if (actualHp <= 0)
+        {
+            StartCoroutine(Respawn());
+            return actualHp;
+        }
+        ShowHpToPlayersSwitch(loss);
+        return actualHp;
+    }
+
+    public void ShowHpToPlayersSwitch(int loss)
+    {
+        if (isClient)
+            CMDShowHpToPlayers(loss);
+        else
+            RPCShowHpToPlayers(loss);
+    }
+
+    [Command]
+    void CMDShowHpToPlayers(int loss)
+    {
+        RPCShowHpToPlayers(loss);
+    }
+
+    [ClientRpc]
+    public void RPCShowHpToPlayers(int loss)
+    {
+            HpColorSwitch();
+            _damageIndicatorInstance = Instantiate(_damageIndicator, gameObject.transform, false);
+            _damageIndicator.text = loss.ToString();
+    }
+
+    public int LoseMana(int loss)
+    {
+        actualMana = actualMana - loss;
+        _manaBar.transform.localScale = new Vector3(startValueMANA / maxMana * actualMana, _manaBar.transform.localScale.y, _manaBar.transform.localScale.z);
+
+        return actualMana;
+    }
+
+    public void HpColorSwitch()
+    {
+        if(isClient)
+            CMDHpColor();
+        else
+            RPCHpColor();
+    }
+
+    public void CMDHpColor()
+    {
+        RPCHpColor();
+    }
+
+    public void RPCHpColor()
+    {
+        if(actualHp > maxHp/2)
+        {
+            _hpBar.color = Color.green;
+        }
+
+        if (actualHp <= maxHp / 2 && actualHp > maxHp / 4)
+        {
+            _hpBar.color = Color.yellow;
+        }
+
+        if (actualHp <= maxHp / 4)
+        {
+            _hpBar.color = Color.red;
+        }
+        _hpBar.transform.localScale = new Vector3(startValueHP / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);
+    }
+
+    public void HealUp()
+    {
+        actualHp = maxHp;
+    }
+
+    public IEnumerator Respawn()
+    {
+        if(_isMob)
+        {
+            gameObject.transform.position = _startingPosition;
+            _navMeshAgent.enabled = false;
+            GetComponent<MeshRenderer>().enabled = false;
+            GetComponent<BeingHP>().enabled = false;
+            GetComponent<EnemyAttack>().enabled = false;
+            _holder.SetActive(false);
+            yield return new WaitForSeconds(3);
+            _holder.SetActive(true);
+            _navMeshAgent.enabled = true;
+            GetComponent<MeshRenderer>().enabled = true;
+            GetComponent<BeingHP>().enabled = true;
+            GetComponent<EnemyAttack>().enabled = true;
+        }
+        else 
+        {
+            gameObject.transform.position = _startingPosition;
+            _navMeshAgent.enabled = false;
+            GetComponent<PlayerController>().enabled = false;
+            GetComponent<MeshRenderer>().enabled = false;
+            GetComponent<BeingHP>().enabled = false;
+            GetComponent<SkillUsage>().enabled = false;
+            _holder.SetActive(false);
+            yield return new WaitForSeconds(3);
+            _holder.SetActive(true);
+            _navMeshAgent.enabled = true;
+            GetComponent<PlayerController>().enabled = true;
+            GetComponent<MeshRenderer>().enabled = true;
+            GetComponent<BeingHP>().enabled = true;
+            actualHp = maxHp;
+            HpColorSwitch();
+            GetComponent<SkillUsage>().enabled = true;
+        }
+    }
+
+    IEnumerator isAttackedRecently()
+    {
+        isAttacked = true;
+        yield return new WaitForSeconds(3);
+        isAttacked = false;
+    }
+}
