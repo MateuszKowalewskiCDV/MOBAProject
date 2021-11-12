@@ -14,6 +14,11 @@ public class ChampionClass : MonoBehaviour
     [SerializeField]
     private Image _choosenClass, _choosenStone;
 
+    [SerializeField]
+    private GameObject _shop;
+
+    private SendShop _sendShop;
+
     void Update()
     {
         if (abilityOneAccess == true)
@@ -69,19 +74,34 @@ public class ChampionClass : MonoBehaviour
         }
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Player")
+        {
+            other.TryGetComponent<SendShop>(out _sendShop);
+            _shop = _sendShop.Send();
+        }
+    }
+
     void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
+            if (_shop == null)
+                return;
+            _shop.SetActive(true);
             abilityOneAccess = true;
             abilityTwoAccess = true;
         }
-    }
+    }   
 
     void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
+            if (_shop == null)
+                return;
+            _shop.SetActive(false);
             abilityOneAccess = false;
             abilityTwoAccess = false;
         }

@@ -19,8 +19,13 @@ public class OutlineOnMouseOver : MonoBehaviour
     {
         _isOnObject = true;
         _outline.enabled = true;
+        if(_isChoosen == false)
+            _outline.OutlineWidth = 1;
         if (Input.GetMouseButtonDown(1))
+        {
+            _outline.OutlineWidth = 2;
             _isChoosen = true;
+        }
     }
 
     public void Update()

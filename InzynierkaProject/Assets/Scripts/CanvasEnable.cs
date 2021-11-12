@@ -1,25 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Mirror;
-using TMPro;
 
 public class CanvasEnable : NetworkBehaviour
 {
-    private Canvas canvas;
-    [SerializeField]
-    public Image _skill1;
-    [SerializeField]
-    public TextMeshProUGUI _skill1Ammo;
+    private NetworkIdentity _nt;
 
-    public void Awake()
+    public void Start()
     {
-        canvas = GetComponent<Canvas>();
-    }
+        _nt = GetComponentInParent<NetworkIdentity>();
 
-    public override void OnStartAuthority()
-    {
-        canvas.gameObject.SetActive(true);
+        if (_nt.isLocalPlayer)
+            GetComponent<Canvas>().gameObject.SetActive(true);
     }
 }
