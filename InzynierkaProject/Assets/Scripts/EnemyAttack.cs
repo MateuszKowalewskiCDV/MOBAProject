@@ -20,6 +20,12 @@ public class EnemyAttack : MonoBehaviour
     private Transform _targetedPlayer = null;
     private BeingHP _bh;
 
+    public SpriteRenderer _attackedIndicator;
+
+    public Sprite _calm, _angry;
+
+    private bool _playerInside = false;
+
 
     void Start()
     {
@@ -33,11 +39,28 @@ public class EnemyAttack : MonoBehaviour
         _mobAgent.speed = _mob.speed;
         _mobAgent.stoppingDistance = _mob.range;
     }
-    
+
+    public void Update()
+    {
+        if(_bh.isAttacked == true)
+        {
+            _attackedIndicator.sprite = _angry;
+        }
+        else if(_playerInside == false)
+        {
+            _attackedIndicator.sprite = _calm;
+        }
+        else if(_playerInside == true)
+        {
+            _attackedIndicator.sprite = _angry;
+        }
+    }
+
     void OnTriggerStay(Collider other)
     {
         if (other.CompareTag(_player))
         {
+            
             if(_targetedPlayer == null || Vector3.Distance(transform.position, other.gameObject.transform.position) < Vector3.Distance(transform.position, _targetedPlayer.transform.position))
             {
                 _targetedPlayer = other.transform;
@@ -45,6 +68,7 @@ public class EnemyAttack : MonoBehaviour
 
             if (Mathf.Floor(Vector3.Distance(_targetedPlayer.position, gameObject.transform.position)) >= _mob.range)
             {
+                _playerInside = true;
                 GoToPlayer(_targetedPlayer.gameObject);
             }
             else
@@ -52,16 +76,26 @@ public class EnemyAttack : MonoBehaviour
                 Attack(_targetedPlayer);
             }
         }
+
+        if(!other.CompareTag(_player) && _playerInside == false)
+        {
+            GoBack();
+        }
     }
 
     public void OnTriggerExit(Collider other)
     {
+        if(other.CompareTag(_player))
+        {
+            _playerInside = false;
+        }
         GoBack();
     }
 
     void GoToPlayer(GameObject player)
-    {    
-        if(Vector3.Distance(transform.position, _startingPoint) < _mob.followRange || _bh.isAttacked == true)
+    {
+        _attackedIndicator.sprite = _angry;
+        if (Vector3.Distance(transform.position, _startingPoint) < _mob.followRange || _bh.isAttacked == true)
         {
             _mobAgent.SetDestination(player.transform.position);
         }
@@ -84,8 +118,16 @@ public class EnemyAttack : MonoBehaviour
 
     void GoBack()
     {
-        _mobAgent.SetDestination(_startingPoint);
-        _bh.HpColorSwitch();
-        _bh.HealUp();
+        if(_bh.isAttacked == true)
+        {
+
+        }
+        else
+        {
+            _mobAgent.SetDestination(_startingPoint);
+            _bh.HpColorSwitch();
+            _bh.HealUp();
+            _attackedIndicator.sprite = _calm;
+        }
     }
 }

@@ -13,7 +13,7 @@ public class MobScriptable : ScriptableObject
     public Sprite sprite;
     public float speed;
     public int damage;
-    public int attackSpeed;
+    public float attackSpeed;
     public float range;
     public float followRange;
     public GameObject enemyPrefab;

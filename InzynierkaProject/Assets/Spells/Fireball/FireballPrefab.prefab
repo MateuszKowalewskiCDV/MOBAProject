@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: 7566252942552897225}
   - component: {fileID: 122371266276884502}
   m_Layer: 14
-  m_Name: Fireball
+  m_Name: FireballPrefab
   m_TagString: Ability
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -276,6 +276,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e74e089f2c475b4cad594b29cd04577, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   _spell: {fileID: 11400000, guid: f64b67329511eb54c893a3f5b8dffd88, type: 2}
   _trail: {fileID: 271781905934650338}
   _fireball: {fileID: 7335695005975520389}
@@ -294,7 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
-  serverOnly: 0
+  serverOnly: 1
   visible: 0
   m_AssetId: 
   hasSpawned: 0

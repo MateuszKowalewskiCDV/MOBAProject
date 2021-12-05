@@ -224,6 +224,7 @@ MonoBehaviour:
   _damageIndicatorInstance: {fileID: 0}
   _isMob: 0
   isAttacked: 0
+  _isAttackedTimer: 0
   _mob: {fileID: 0}
 --- !u!136 &3575687302622042421
 CapsuleCollider:
@@ -375,7 +376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  clientAuthority: 0
+  clientAuthority: 1
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01

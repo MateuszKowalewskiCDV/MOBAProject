@@ -36,6 +36,7 @@ public class BeingHP : NetworkBehaviour
     private float startValueHP, startValueMANA;
 
     public bool _isMob, isAttacked;
+    public float _isAttackedTimer;
     public MobScriptable _mob;
 
     private Vector3 _startingPosition;
@@ -84,12 +85,18 @@ public class BeingHP : NetworkBehaviour
                 _manaBar.transform.localScale = new Vector3(startValueMANA / maxMana * actualMana, _manaBar.transform.localScale.y, _manaBar.transform.localScale.z);
                 manaTimer = 0;
             }
+
+        if(isAttacked != false)
+        {
+            isAttackedRecently();
+        }
     }
 
     public int LoseHp(int loss)
     {
         actualHp = actualHp - loss;
-        StartCoroutine(isAttackedRecently());
+        _isAttackedTimer = 2;
+        isAttacked = true;
 
         if (actualHp <= 0)
         {
@@ -182,7 +189,9 @@ public class BeingHP : NetworkBehaviour
             _navMeshAgent.enabled = true;
             GetComponent<MeshRenderer>().enabled = true;
             GetComponent<BeingHP>().enabled = true;
+            actualHp = maxHp;
             GetComponent<EnemyAttack>().enabled = true;
+            RPCHpColor();
         }
         else 
         {
@@ -202,13 +211,20 @@ public class BeingHP : NetworkBehaviour
             actualHp = maxHp;
             HpColorSwitch();
             GetComponent<SkillUsage>().enabled = true;
+            RPCHpColor();
         }
     }
 
-    IEnumerator isAttackedRecently()
+    void isAttackedRecently()
     {
-        isAttacked = true;
-        yield return new WaitForSeconds(3);
-        isAttacked = false;
+        if(_isAttackedTimer >= 0)
+        {
+            _isAttackedTimer -= Time.deltaTime;
+        }
+
+        if(_isAttackedTimer <= 0 && isAttacked != false)
+        {
+            isAttacked = false;
+        }
     }
 }
