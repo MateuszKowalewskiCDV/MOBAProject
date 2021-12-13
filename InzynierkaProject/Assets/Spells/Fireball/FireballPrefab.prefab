@@ -283,6 +283,11 @@ MonoBehaviour:
   _fireball: {fileID: 7335695005975520389}
   _clipCast: {fileID: 8300000, guid: 8e659725f62d9c9409ed76c8eee29abe, type: 3}
   _clipHit: {fileID: 8300000, guid: 7dee66a33af15a748ba692d91eacd709, type: 3}
+  myTeam: RedTeam
+  owner: {fileID: 0}
+  sc: {fileID: 7829271854687712666}
+  velocity: {x: 0, y: 0, z: 0}
+  rb: {fileID: 154569652103101932}
 --- !u!114 &7566252942552897225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,7 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
-  serverOnly: 1
+  serverOnly: 0
   visible: 0
   m_AssetId: 
   hasSpawned: 0

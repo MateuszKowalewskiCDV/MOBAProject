@@ -23,7 +23,7 @@ MonoBehaviour:
   damage: 0
   range: 0
   castableOnAlly: 0
-  buffValue: 10
-  duration: 5
+  buffValue: 3
+  duration: 2
   spellPrefab: {fileID: 3546753988932658321, guid: 76ef7c080ee993a478e87a44dd4b83db, type: 3}
   indicator: {fileID: 8961954778505008542, guid: 2c65069506971f94589e0a40fde56ddc, type: 3}

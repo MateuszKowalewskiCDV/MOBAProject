@@ -68,6 +68,7 @@ public class SkillUsage : NetworkBehaviour
         }
     }
 
+
     void UseSkillshot()
     {
         StartCoroutine(CooldownApply());
@@ -75,18 +76,21 @@ public class SkillUsage : NetworkBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit))
         {
-            Shoot(hit);
+            Vector3 bulletDirection = hit.point - _indicator.transform.position;
+            bulletDirection.Normalize();
+            velocity = bulletDirection * _skill.speed;
+            Vector3 velocityOfSkillshot = velocity;
+
+            Shoot(velocity);
         }
         _indicator.SetActive(false);
         _indicatorExiste = false;
     }
 
-    public void Shoot(RaycastHit hit)
+    public void Shoot(Vector3 velocity)
     {
-        Vector3 bulletDirection = hit.point - _indicator.transform.position;
-        bulletDirection.Normalize();
-        velocity = bulletDirection * _skill.speed;
-        CMDShootPrefab();
+        if(isLocalPlayer)
+            CMDShootPrefab(velocity);
     }
 
     [Command]
@@ -101,19 +105,25 @@ public class SkillUsage : NetworkBehaviour
     }
 
     [Command]
-    void CMDShootPrefab()
+    void CMDShootPrefab(Vector3 velocityOfSkillshot)
     {
-        RPCShootPrefab();
+        RPCShootPrefab(velocityOfSkillshot);
     }
 
     [ClientRpc]
-    public void RPCShootPrefab()
+    public void RPCShootPrefab(Vector3 velocityOfSkillshot)
     {
         _prefabSkillInstance = Instantiate(_prefabSkill, transform.position, Quaternion.identity);
-        _prefabSkillInstance.GetComponent<Rigidbody>().velocity = velocity;
-        NetworkServer.Spawn(_prefabSkillInstance);
+        _prefabSkillInstance.GetComponent<Rigidbody>().velocity = velocityOfSkillshot;
+        Physics.IgnoreCollision(GetComponent<Collider>(), _prefabSkillInstance.GetComponent<Collider>());
+
         if (_skill.spellName == "Fireball")
+        {
+            _prefabSkillInstance.GetComponent<FireballPrefab>().velocity = velocity;
             _prefabSkillInstance.GetComponent<FireballPrefab>()._spell = _skill;
+            _prefabSkillInstance.GetComponent<FireballPrefab>().myTeam = gameObject.tag;
+            _prefabSkillInstance.GetComponent<FireballPrefab>().owner = gameObject;
+        }
     }
 
     IEnumerator CooldownApply()

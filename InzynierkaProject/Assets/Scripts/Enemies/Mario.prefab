@@ -337,7 +337,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4663161757411935922}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.43, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8494404809846983158}
@@ -423,6 +423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 285cae103cbc1e1469d4c700e1bbac3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isChoosen: 0
 --- !u!114 &4663161757411935924
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -435,8 +436,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb8d98c7b44c1604bb09e5b0528e3b48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   _mob: {fileID: 11400000, guid: 3ee5758b86af206449ec486d860aa5e8, type: 2}
   _nameText: {fileID: 0}
+  _mobAgent: {fileID: 4663161757411935929}
+  _bh: {fileID: 92918661853540111}
   _attackedIndicator: {fileID: 3947552306822569976}
   _calm: {fileID: 21300000, guid: 35836caaac033644ebc34dae66b0e319, type: 3}
   _angry: {fileID: 21300000, guid: d933a97ec26a3584f9854356a5ec85eb, type: 3}
@@ -498,7 +503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  clientAuthority: 0
+  clientAuthority: 1
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
@@ -536,7 +541,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   _holder: {fileID: 961276118625796066}
-  player: {fileID: 0}
+  player: {fileID: 4663161757411935930}
   _hpBar: {fileID: 805097135792874890}
   _manaBar: {fileID: 5190029916569446387}
   maxHp: 200
@@ -549,8 +554,13 @@ MonoBehaviour:
   _damageIndicatorInstance: {fileID: 0}
   _isMob: 1
   isAttacked: 0
+  _isNexus: 0
   _isAttackedTimer: 0
   _mob: {fileID: 11400000, guid: b9b0e91d574ee634c828ae753fc5fa44, type: 2}
+  myBushNumber: 0
+  playerRespawnTime: 0
+  mobRespawnTime: 30
+  expValue: 100
 --- !u!195 &4663161757411935929
 NavMeshAgent:
   m_ObjectHideFlags: 0

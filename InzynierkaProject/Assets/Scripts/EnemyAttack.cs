@@ -3,22 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.AI;
+using Mirror;
 
-public class EnemyAttack : MonoBehaviour
+public class EnemyAttack : NetworkBehaviour
 {
     public MobScriptable _mob;
     public TextMeshPro _nameText;
-    private NavMeshAgent _mobAgent;
 
-    // Timer oraz pozycja startowa
+    public NavMeshAgent _mobAgent;
+
     private float _timer = 0;
     private Vector3 _startingPoint;
 
-    // String przechowujący tag
-    private string _player = "Player";
-
     private Transform _targetedPlayer = null;
-    private BeingHP _bh;
+
+    public BeingHP _bh;
 
     public SpriteRenderer _attackedIndicator;
 
@@ -32,10 +31,6 @@ public class EnemyAttack : MonoBehaviour
         _nameText = GetComponentInChildren<TextMeshPro>();
         _nameText.text = _mob.name;
         _startingPoint = transform.position;
-
-        _mobAgent = GetComponent<NavMeshAgent>();
-        _bh = GetComponent<BeingHP>();
-
         _mobAgent.speed = _mob.speed;
         _mobAgent.stoppingDistance = _mob.range;
     }
@@ -58,7 +53,7 @@ public class EnemyAttack : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag(_player))
+        if ((other.CompareTag("RedTeam") || other.CompareTag("BlueTeam") || other.CompareTag("GreenTeam") || other.CompareTag("YellowTeam")) && _mobAgent.enabled == true)
         {
             
             if(_targetedPlayer == null || Vector3.Distance(transform.position, other.gameObject.transform.position) < Vector3.Distance(transform.position, _targetedPlayer.transform.position))
@@ -77,7 +72,7 @@ public class EnemyAttack : MonoBehaviour
             }
         }
 
-        if(!other.CompareTag(_player) && _playerInside == false)
+        if(!(other.CompareTag("RedTeam") || other.CompareTag("BlueTeam") || other.CompareTag("GreenTeam") || other.CompareTag("YellowTeam")) && _playerInside == false)
         {
             GoBack();
         }
@@ -85,7 +80,7 @@ public class EnemyAttack : MonoBehaviour
 
     public void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag(_player))
+        if(other.CompareTag("RedTeam") || other.CompareTag("BlueTeam") || other.CompareTag("GreenTeam") || other.CompareTag("YellowTeam"))
         {
             _playerInside = false;
         }
@@ -110,7 +105,7 @@ public class EnemyAttack : MonoBehaviour
         _timer += Time.deltaTime;
         if(_timer >= _mob.attackSpeed)
         {
-            player.GetComponent<BeingHP>().LoseHp(_mob.damage);
+            player.GetComponent<BeingHP>().LoseHp(_mob.damage, gameObject);
             _timer = 0;
         }
         _mobAgent.ResetPath();
@@ -118,11 +113,7 @@ public class EnemyAttack : MonoBehaviour
 
     void GoBack()
     {
-        if(_bh.isAttacked == true)
-        {
-
-        }
-        else
+        if(!_bh.isAttacked == true)
         {
             _mobAgent.SetDestination(_startingPoint);
             _bh.HpColorSwitch();

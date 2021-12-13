@@ -17,9 +17,11 @@ public class PlayerLevel : MonoBehaviour
     private GameObject bg, sld;
     [SerializeField]
     private Image img;
+    private BeingHP _bh;
 
     void Start()
     {
+        _bh = GetComponent<BeingHP>();
         _exp = 0;
         _level = 1;
         _levelIndicator.text = _level.ToString();
@@ -28,19 +30,12 @@ public class PlayerLevel : MonoBehaviour
         _expSlider.value = _exp;
     }
 
-    public void Update()
-    {
-        if(Input.GetKey(KeyCode.J))
-        {
-            AddExp(20);
-        }
-    }
-
-    void AddExp(int exp)
+    public void AddExp(int exp)
     {
         _exp += exp;
         if(_exp >= _expValues[_level] && _level < 11)
         {
+            GiveStats();
             _exp = _exp - _expValues[_level];
             _level += 2;
             _levelIndicator.text = (_level).ToString();
@@ -55,5 +50,11 @@ public class PlayerLevel : MonoBehaviour
             img.color = Color.grey;
             return;
         }
+    }
+
+    public void GiveStats()
+    {
+        _bh.maxHp += 100;
+        _bh.HpColorSwitch();
     }
 }

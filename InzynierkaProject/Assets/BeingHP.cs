@@ -10,12 +10,11 @@ public class BeingHP : NetworkBehaviour
     public GameObject _holder;
     private NetworkConnection _nt;
     public Rigidbody player;
-    [SerializeField]
-    private SpriteRenderer _hpBar;
-    [SerializeField]
-    private SpriteRenderer _manaBar;
+    public SpriteRenderer _hpBar;
+    public SpriteRenderer _manaBar;
     public int maxHp;
     public int maxMana;
+
     [SyncVar]
     public int actualHp;
     [SyncVar]
@@ -35,17 +34,25 @@ public class BeingHP : NetworkBehaviour
 
     private float startValueHP, startValueMANA;
 
-    public bool _isMob, isAttacked;
+    public bool _isMob, isAttacked, _isNexus;
     public float _isAttackedTimer;
     public MobScriptable _mob;
 
     private Vector3 _startingPosition;
     private NavMeshAgent _navMeshAgent;
 
+    public int myBushNumber = 0;
+
+    public int playerRespawnTime;
+    public int mobRespawnTime;
+
+    public int expValue;
+
     public void Start()
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _startingPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+
         if (_isMob)
         {
             startValueHP = _hpBar.transform.localScale.x;
@@ -70,21 +77,21 @@ public class BeingHP : NetworkBehaviour
 
     public void Update()
     {
-            hpTimer += Time.deltaTime;
-            manaTimer += Time.deltaTime;
+        hpTimer += Time.deltaTime;
+        manaTimer += Time.deltaTime;
 
-            if (hpTimer >= _hpRegenTime && actualHp < maxHp)
-            {
-                actualHp += _hpRegen;
-                HpColorSwitch();
-                hpTimer = 0;
-            }
-            if (manaTimer >= _manaRegenTime && actualMana < maxMana)
-            {
-                actualMana += _manaRegen;
-                _manaBar.transform.localScale = new Vector3(startValueMANA / maxMana * actualMana, _manaBar.transform.localScale.y, _manaBar.transform.localScale.z);
-                manaTimer = 0;
-            }
+        if (hpTimer >= _hpRegenTime && actualHp < maxHp)
+        {
+            actualHp += _hpRegen;
+            HpColorSwitch();
+            hpTimer = 0;
+        }
+        if (manaTimer >= _manaRegenTime && actualMana < maxMana)
+        {
+            actualMana += _manaRegen;
+            _manaBar.transform.localScale = new Vector3(startValueMANA / maxMana * actualMana, _manaBar.transform.localScale.y, _manaBar.transform.localScale.z);
+            manaTimer = 0;
+        }
 
         if(isAttacked != false)
         {
@@ -92,18 +99,27 @@ public class BeingHP : NetworkBehaviour
         }
     }
 
-    public int LoseHp(int loss)
+    public int LoseHp(int loss, GameObject who)
     {
-        actualHp = actualHp - loss;
+        actualHp -= loss;
+
         _isAttackedTimer = 2;
         isAttacked = true;
 
         if (actualHp <= 0)
         {
+            if(_isMob)
+            {
+                who.TryGetComponent(out PlayerLevel playerLevel);
+                playerLevel.AddExp(expValue);
+            }
+
             StartCoroutine(Respawn());
             return actualHp;
         }
+
         ShowHpToPlayersSwitch(loss);
+
         return actualHp;
     }
 
@@ -115,7 +131,7 @@ public class BeingHP : NetworkBehaviour
             RPCShowHpToPlayers(loss);
     }
 
-    [Command]
+    [Command(requiresAuthority = false)]
     void CMDShowHpToPlayers(int loss)
     {
         RPCShowHpToPlayers(loss);
@@ -126,7 +142,7 @@ public class BeingHP : NetworkBehaviour
     {
             HpColorSwitch();
             _damageIndicatorInstance = Instantiate(_damageIndicator, gameObject.transform, false);
-            _damageIndicator.text = loss.ToString();
+            _damageIndicatorInstance.text = loss.ToString();
     }
 
     public int LoseMana(int loss)
@@ -141,15 +157,17 @@ public class BeingHP : NetworkBehaviour
     {
         if(isClient)
             CMDHpColor();
-        else
+        else if(isServer)
             RPCHpColor();
     }
 
+    [Command(requiresAuthority = false)]
     public void CMDHpColor()
     {
         RPCHpColor();
     }
 
+    [ClientRpc]
     public void RPCHpColor()
     {
         if(actualHp > maxHp/2)
@@ -166,7 +184,8 @@ public class BeingHP : NetworkBehaviour
         {
             _hpBar.color = Color.red;
         }
-        _hpBar.transform.localScale = new Vector3(startValueHP / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);
+
+        _hpBar.transform.localScale = new Vector3(startValueHP / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);   
     }
 
     public void HealUp()
@@ -176,7 +195,11 @@ public class BeingHP : NetworkBehaviour
 
     public IEnumerator Respawn()
     {
-        if(_isMob)
+        if(_isNexus)
+        {
+            Destroy(gameObject);
+        }
+        else if(_isMob)
         {
             gameObject.transform.position = _startingPosition;
             _navMeshAgent.enabled = false;
@@ -184,7 +207,7 @@ public class BeingHP : NetworkBehaviour
             GetComponent<BeingHP>().enabled = false;
             GetComponent<EnemyAttack>().enabled = false;
             _holder.SetActive(false);
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(mobRespawnTime);
             _holder.SetActive(true);
             _navMeshAgent.enabled = true;
             GetComponent<MeshRenderer>().enabled = true;
@@ -202,7 +225,7 @@ public class BeingHP : NetworkBehaviour
             GetComponent<BeingHP>().enabled = false;
             GetComponent<SkillUsage>().enabled = false;
             _holder.SetActive(false);
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(playerRespawnTime);
             _holder.SetActive(true);
             _navMeshAgent.enabled = true;
             GetComponent<PlayerController>().enabled = true;

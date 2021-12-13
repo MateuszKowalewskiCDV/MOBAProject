@@ -5,7 +5,7 @@ using UnityEngine;
 public class OutlineOnMouseOver : MonoBehaviour
 {
     private Outline _outline;
-    private bool _isChoosen;
+    public bool _isChoosen;
     private bool _isOnObject;
     private Camera cam;
 

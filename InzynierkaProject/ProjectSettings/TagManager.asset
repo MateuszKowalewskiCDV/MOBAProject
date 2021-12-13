@@ -11,6 +11,10 @@ TagManager:
   - Canvas
   - Ability
   - ShopCanvas
+  - RedTeam
+  - BlueTeam
+  - GreenTeam
+  - YellowTeam
   layers:
   - Default
   - TransparentFX
@@ -27,12 +31,12 @@ TagManager:
   - EnemyPlayer
   - AllyPlayer
   - Ability
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Tower
+  - MinimapCamera
+  - RedTeam
+  - BlueTeam
+  - GreenTeam
+  - YellowTeam
   - 
   - 
   - 

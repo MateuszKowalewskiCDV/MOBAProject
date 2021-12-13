@@ -50,11 +50,14 @@ public class CameraMovement : MonoBehaviour
 
             if (Input.mouseScrollDelta.y > 0f)
             {
-                Camera.main.fieldOfView += _cameraZoomSpeed * Time.deltaTime;
+                if (Camera.main.fieldOfView <= 55f)
+                    Camera.main.fieldOfView += _cameraZoomSpeed * Time.deltaTime;
             }
+
             if (Input.mouseScrollDelta.y < 0f)
             {
-                Camera.main.fieldOfView += -_cameraZoomSpeed * Time.deltaTime;
+                if(Camera.main.fieldOfView >= 25f)
+                    Camera.main.fieldOfView += -_cameraZoomSpeed * Time.deltaTime;
             }
         }
     }

@@ -32,7 +32,7 @@ public class MushroomCollider : MonoBehaviour
                 {
                     if (nearbyObjects.gameObject.TryGetComponent(out BeingHP beingHP) == true)
                     {
-                        beingHP.LoseHp(mineDamage);
+                        beingHP.LoseHp(mineDamage, gameObject);
                     }
                 }
                 Destroy(gameObject);

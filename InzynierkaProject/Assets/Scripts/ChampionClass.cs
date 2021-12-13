@@ -2,116 +2,120 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-public class ChampionClass : MonoBehaviour
+public class ChampionClass : NetworkBehaviour
 {
-    private bool abilityOneAccess = false, abilityTwoAccess = false;
-    private string abilityOne = "", abilityTwo = "";
+    private bool classAccess = false;
+    [SerializeField]
+    private string classOfPlayer = "";
+    public string myTeam;
 
     [SerializeField]
-    private Sprite Archer, Warrior, Mage, Water, Fire, Ground, Air;
+    private Sprite Archer, Warrior, Mage, Support;
 
     [SerializeField]
-    private Image _choosenClass, _choosenStone;
+    private Image _choosenClass;
 
     [SerializeField]
     private GameObject _shop;
 
     private SendShop _sendShop;
 
-    void Update()
-    {
-        if (abilityOneAccess == true)
-        {
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                abilityOne = "Archer";
-                _choosenClass.sprite = Archer;
-                MyClass(abilityOne, abilityTwo);
-                abilityTwoAccess = true;
-            }
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                abilityOne = "Mage";
-                _choosenClass.sprite = Mage;
-                MyClass(abilityOne, abilityTwo);
-                abilityTwoAccess = true;
-            }
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                abilityOne = "Warrior";
-                _choosenClass.sprite = Warrior;
-                MyClass(abilityOne, abilityTwo);
-                abilityTwoAccess = true;
-            }
-        }
-        if (abilityTwoAccess == true)
-        {
-            if (Input.GetKeyDown(KeyCode.H))
-            {
-                abilityTwo = "Fire";
-                _choosenStone.sprite = Fire;
-                MyClass(abilityOne, abilityTwo);
-            }
-            if (Input.GetKeyDown(KeyCode.J))
-            {
-                abilityTwo = "Water";
-                _choosenStone.sprite = Water;
-                MyClass(abilityOne, abilityTwo);
-            }
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                abilityTwo = "Air";
-                _choosenStone.sprite = Air;
-                MyClass(abilityOne, abilityTwo);
-            }
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                abilityTwo = "Ground";
-                _choosenStone.sprite = Ground;
-                MyClass(abilityOne, abilityTwo);
-            }
-        }
-    }
+    [SerializeField]
+    private bool notSet = true;
 
     public void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+
+        if (other.GetComponent<NetworkIdentity>().isLocalPlayer || other.GetComponent<NetworkIdentity>().isServer)
         {
-            other.TryGetComponent<SendShop>(out _sendShop);
-            _shop = _sendShop.Send();
+            if (other.gameObject.tag == myTeam)
+            {
+                other.TryGetComponent<SendShop>(out _sendShop);
+                _shop = _sendShop.Send();
+            }
+        }
+
+        if (isLocalPlayer && notSet == true || isServer && notSet == true)
+        {
+            _sendShop.archer.onClick.AddListener(ChangeClassToArcher);
+            _sendShop.warrior.onClick.AddListener(ChangeClassToWarrior);
+            _sendShop.mage.onClick.AddListener(ChangeClassToMage);
+            _sendShop.support.onClick.AddListener(ChangeClassToSupport);
+            notSet = false;
         }
     }
 
     void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.GetComponent<NetworkIdentity>().isLocalPlayer)
         {
-            if (_shop == null)
-                return;
-            _shop.SetActive(true);
-            abilityOneAccess = true;
-            abilityTwoAccess = true;
+            if (other.gameObject.tag == myTeam)
+            {
+                if (_shop == null)
+                    return;
+                _shop.SetActive(true);
+                classAccess = true;
+            }
         }
     }   
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.GetComponent<NetworkIdentity>().isLocalPlayer)
         {
-            if (_shop == null)
-                return;
-            _shop.SetActive(false);
-            abilityOneAccess = false;
-            abilityTwoAccess = false;
+            if (other.gameObject.tag == myTeam)
+            {
+                if (_shop == null)
+                    return;
+                _shop.SetActive(false);
+                classAccess = false;
+            }
         }
     }
 
-    public string MyClass(string abilityOne, string abilityTwo)
+    public void ChangeClassToArcher()
     {
-        string myClass = "";
-        myClass = abilityOne.ToString() + " " + abilityTwo.ToString();
-        Debug.Log(myClass);
-        return myClass;
+        classOfPlayer = "Archer";
+        _sendShop.choosenClass.sprite = Archer;
+        if (isLocalPlayer || isServer)
+            _sendShop.archer.interactable = false;
+        _sendShop.warrior.interactable = false;
+        _sendShop.mage.interactable = false;
+        _sendShop.support.interactable = false;
+    }
+
+    public void ChangeClassToWarrior()
+    {
+        classOfPlayer = "Warrior";
+        _sendShop.choosenClass.sprite = Warrior;
+        if (isLocalPlayer || isServer)
+            _sendShop.warrior.interactable = false;
+        _sendShop.archer.interactable = false;
+        _sendShop.mage.interactable = false;
+        _sendShop.support.interactable = false;
+    }
+
+    public void ChangeClassToMage()
+    {
+        classOfPlayer = "Mage";
+        _sendShop.choosenClass.sprite = Mage;
+        if (isLocalPlayer || isServer)
+            _sendShop.mage.interactable = false;
+        _sendShop.archer.interactable = false;
+        _sendShop.warrior.interactable = false;
+        _sendShop.support.interactable = false;
+    }
+
+    public void ChangeClassToSupport()
+    {
+        classOfPlayer = "Support";
+        _sendShop.choosenClass.sprite = Support;
+        if (isLocalPlayer || isServer)
+            _sendShop.support.interactable = false;
+        _sendShop.archer.interactable = false;
+        _sendShop.warrior.interactable = false;
+        _sendShop.mage.interactable = false;
     }
 }
