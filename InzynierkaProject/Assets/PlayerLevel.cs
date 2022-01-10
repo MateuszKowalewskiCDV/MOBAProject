@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Mirror;
 
-public class PlayerLevel : MonoBehaviour
+public class PlayerLevel : NetworkBehaviour
 {
     private int _exp;
     private int _level;
@@ -30,31 +31,40 @@ public class PlayerLevel : MonoBehaviour
         _expSlider.value = _exp;
     }
 
+    [ClientRpc]
     public void AddExp(int exp)
     {
-        _exp += exp;
-        if(_exp >= _expValues[_level] && _level < 11)
+        if(isServer)
         {
-            GiveStats();
-            _exp = _exp - _expValues[_level];
-            _level += 2;
-            _levelIndicator.text = (_level).ToString();
-            _level -= 1;
-            _expSlider.maxValue = _expValues[_level];
-        }
-        _expSlider.value = _exp;
-        if(_level >= 11)
-        {
-            bg.SetActive(false);
-            sld.SetActive(false);
-            img.color = Color.grey;
-            return;
+            _exp += exp;
+            if (_exp >= _expValues[_level] && _level < 11)
+            {
+                GiveStats();
+                _exp = _exp - _expValues[_level];
+                _level += 2;
+                _levelIndicator.text = (_level).ToString();
+                _level -= 1;
+                _expSlider.maxValue = _expValues[_level];
+            }
+            _expSlider.value = _exp;
+            if (_level >= 11)
+            {
+                bg.SetActive(false);
+                sld.SetActive(false);
+                img.color = Color.grey;
+                return;
+            }
         }
     }
 
+    [ClientRpc]
     public void GiveStats()
     {
         _bh.maxHp += 100;
-        _bh.HpColorSwitch();
+
+        if (isServer)
+            _bh.RPCHpColor();
+        else
+            _bh.CmdHpColor();
     }
 }

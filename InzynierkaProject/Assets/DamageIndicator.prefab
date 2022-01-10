@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 4255874726133203760}
   - component: {fileID: 929647590835587702}
   - component: {fileID: 2670842005838756022}
+  - component: {fileID: 594525962696831827}
+  - component: {fileID: -93318396983887333}
   m_Layer: 0
   m_Name: DamageIndicator
   m_TagString: Untagged
@@ -51,6 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2786fa2a4d3e81a448bde5c79bde34af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 0}
 --- !u!23 &4255874726133203760
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -195,4 +198,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624aea4ce509c4f4a8bfba3a4c37c511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 2
+--- !u!114 &594525962696831827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169168458513570279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 
+  hasSpawned: 0
+--- !u!114 &-93318396983887333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169168458513570279}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 0
+  localPositionSensitivity: 0.01
+  localRotationSensitivity: 0.01
+  localScaleSensitivity: 0.01
+  compressRotation: 0
+  interpolateScale: 1
+  syncScale: 1

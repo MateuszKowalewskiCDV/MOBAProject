@@ -55,39 +55,60 @@ public class EnemyAttack : NetworkBehaviour
     {
         if ((other.CompareTag("RedTeam") || other.CompareTag("BlueTeam") || other.CompareTag("GreenTeam") || other.CompareTag("YellowTeam")) && _mobAgent.enabled == true)
         {
-            
-            if(_targetedPlayer == null || Vector3.Distance(transform.position, other.gameObject.transform.position) < Vector3.Distance(transform.position, _targetedPlayer.transform.position))
-            {
-                _targetedPlayer = other.transform;
-            }
+                if (_targetedPlayer == null || Vector3.Distance(transform.position, other.gameObject.transform.position) < Vector3.Distance(transform.position, _targetedPlayer.transform.position))
+                {
+                    _targetedPlayer = other.transform;
+                }
 
-            if (Mathf.Floor(Vector3.Distance(_targetedPlayer.position, gameObject.transform.position)) >= _mob.range)
-            {
-                _playerInside = true;
-                GoToPlayer(_targetedPlayer.gameObject);
-            }
-            else
-            {
-                Attack(_targetedPlayer);
-            }
-        }
+                if (Mathf.Floor(Vector3.Distance(_targetedPlayer.position, gameObject.transform.position)) >= _mob.range)
+                {
+                    _playerInside = true;
 
-        if(!(other.CompareTag("RedTeam") || other.CompareTag("BlueTeam") || other.CompareTag("GreenTeam") || other.CompareTag("YellowTeam")) && _playerInside == false)
-        {
-            GoBack();
+                    if(isServer)
+                        RpcGoToPlayer(_targetedPlayer.gameObject);
+                    else
+                        CmdGoToPlayer(_targetedPlayer.gameObject);
+                }
+                else
+                {
+                    if (isServer)
+                        RpcAttack(_targetedPlayer, gameObject);
+                    else
+                        CmdAttack(_targetedPlayer, gameObject);
+                }
+
+
+            if(!(other.CompareTag("RedTeam") || other.CompareTag("BlueTeam") || other.CompareTag("GreenTeam") || other.CompareTag("YellowTeam")) && _playerInside == false)
+            {
+                if (isServer)
+                    RpcGoBack();
+                else
+                    CmdGoBack();
+            }
         }
     }
 
     public void OnTriggerExit(Collider other)
     {
-        if(other.CompareTag("RedTeam") || other.CompareTag("BlueTeam") || other.CompareTag("GreenTeam") || other.CompareTag("YellowTeam"))
-        {
-            _playerInside = false;
-        }
-        GoBack();
+            if (other.CompareTag("RedTeam") || other.CompareTag("BlueTeam") || other.CompareTag("GreenTeam") || other.CompareTag("YellowTeam"))
+            {
+                _playerInside = false;
+            }
+
+            if (isServer)
+                RpcGoBack();
+            else
+                CmdGoBack();
     }
 
-    void GoToPlayer(GameObject player)
+    [Command]
+    void CmdGoToPlayer(GameObject player)
+    {
+        RpcGoToPlayer(player);
+    }
+
+    [ClientRpc]
+    void RpcGoToPlayer(GameObject player)
     {
         _attackedIndicator.sprite = _angry;
         if (Vector3.Distance(transform.position, _startingPoint) < _mob.followRange || _bh.isAttacked == true)
@@ -96,29 +117,60 @@ public class EnemyAttack : NetworkBehaviour
         }
         else
         {
-            GoBack();
+            if (isServer)
+                RpcGoBack();
+            else
+                CmdGoBack();
         }
     }
 
-    void Attack(Transform player)
+    [Command]
+    void CmdAttack(Transform player, GameObject owner)
+    {
+        RpcAttack(player, owner);
+    }
+
+    [ClientRpc]
+    void RpcAttack(Transform player, GameObject owner)
     {
         _timer += Time.deltaTime;
         if(_timer >= _mob.attackSpeed)
         {
-            player.GetComponent<BeingHP>().LoseHp(_mob.damage, gameObject);
-            _timer = 0;
+            if(isServer)
+            {
+                DealDamageToPlayer(player.gameObject, owner);
+                _timer = 0;
+            }
         }
-        _mobAgent.ResetPath();
+        if(isServer)
+            _mobAgent.ResetPath();
     }
 
-    void GoBack()
+    [ClientRpc]
+    void DealDamageToPlayer(GameObject player, GameObject owner)
     {
-        if(!_bh.isAttacked == true)
+        if(isServer)
+            player.gameObject.GetComponent<BeingHP>().LoseHp(_mob.damage, owner);
+    }
+
+    [Command]
+    void CmdGoBack()
+    {
+        RpcGoBack();
+    }
+
+    [ClientRpc]
+    void RpcGoBack()
+    {
+        if(isServer)
         {
-            _mobAgent.SetDestination(_startingPoint);
-            _bh.HpColorSwitch();
-            _bh.HealUp();
-            _attackedIndicator.sprite = _calm;
+            if (!_bh.isAttacked == true)
+            {
+                _mobAgent.SetDestination(_startingPoint);
+                _bh.RPCHpColor();
+                _bh.HealUp();
+                _attackedIndicator.sprite = _calm;
+            }
         }
     }
 }

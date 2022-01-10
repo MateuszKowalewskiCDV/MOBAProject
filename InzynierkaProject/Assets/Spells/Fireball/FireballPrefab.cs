@@ -15,7 +15,7 @@ public class FireballPrefab : NetworkBehaviour
     public string myTeam;
     [SerializeField]
     private string team1, team2, team3;
-    public GameObject owner;
+    public GameObject ownerOfAttack;
     public SphereCollider sc;
     public Vector3 velocity;
     public Rigidbody rb;
@@ -68,48 +68,82 @@ public class FireballPrefab : NetworkBehaviour
     {
         if (collision.gameObject.CompareTag(myTeam))
         {
-            TeammateHit(collision.gameObject);
+            if(isLocalPlayer)
+                CmdTeammateHit(collision.gameObject);
+            if(isServer)
+                RpcTeammateHit(collision.gameObject);
         }
-        else if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
-            MobHit(collision.gameObject);
+            if (isLocalPlayer)
+                CmdEnemyHit(collision.gameObject);
+            if (isServer)
+                RpcEnemyHit(collision.gameObject);
         }
-        else if (collision.gameObject.CompareTag(team1) || collision.gameObject.CompareTag(team2) || collision.gameObject.CompareTag(team3))
+        if (collision.gameObject.CompareTag(team1) || collision.gameObject.CompareTag(team2) || collision.gameObject.CompareTag(team3))
         {
-            EnemyHit(collision.gameObject);
+            if (isLocalPlayer)
+                CmdTeammateHit(collision.gameObject);
+            if (isServer)
+                RpcTeammateHit(collision.gameObject);
         }
-        else if(!collision.gameObject.CompareTag(myTeam))
+        if(!collision.gameObject.CompareTag(myTeam))
         {
             StartCoroutine(EndLifeHit());
         }
     }
 
-    [Command(requiresAuthority = false)]
-    public void EnemyHit(GameObject collision)
+    [Command]
+    public void CmdEnemyHit(GameObject collision)
     {
-        collision.gameObject.TryGetComponent(out BeingHP being);
-        if (being)
+        if (isServer) return;
+            RpcEnemyHit(collision);
+    }
+
+    [Command]
+    public void CmdTeammateHit(GameObject collision)
+    {
+        if (isServer) return;
+            RpcTeammateHit(collision);
+    }
+
+    [Command]
+    public void CmdMobHit(GameObject collision)
+    {
+        if (isServer) return;
+            RpcMobHit(collision);
+    }
+
+    [ClientRpc]
+    public void RpcEnemyHit(GameObject collision)
+    {
+        if(isServer)
         {
-            being.LoseHp(_spell.damage, owner);
+            collision.gameObject.TryGetComponent(out BeingHP being);
+            if (being)
+            {
+                being.LoseHp(_spell.damage, ownerOfAttack);
+            }
+            StartCoroutine(EndLifeHit());
         }
-        StartCoroutine(EndLifeHit());
     }
 
-    [Command(requiresAuthority = false)]
-    public void TeammateHit(GameObject collision)
+    [ClientRpc]
+    public void RpcTeammateHit(GameObject collision)
     {
-        rb.velocity = velocity;
-        Physics.IgnoreCollision(collision.gameObject.GetComponent<CapsuleCollider>(), sc, true);
-        rb.velocity = velocity;
+        rb.velocity += velocity;
+        sc.enabled = false;
+        rb.velocity += velocity;
+        sc.enabled = true;
     }
 
-    [Command(requiresAuthority = false)]
-    public void MobHit(GameObject collision)
+    [ClientRpc]
+    public void RpcMobHit(GameObject collision)
     {
         collision.gameObject.TryGetComponent(out BeingHP being);
         if (being)
         {
-            being.LoseHp(_spell.damage, owner);
+            being.LoseHp(_spell.damage, ownerOfAttack);
         }
         StartCoroutine(EndLifeHit());
     }

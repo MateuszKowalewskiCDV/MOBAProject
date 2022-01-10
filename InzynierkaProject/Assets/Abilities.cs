@@ -53,8 +53,6 @@ public class Abilities : MonoBehaviour
     [SerializeField]
     private KeyCode _keyBindingQ, _keyBindingW, _keyBindingE, _keyBindingR;
 
-    private QAir _airSkill;
-
     //private QSpell QSpell;
     //private WSpell WSpell;
     //private ESpell ESpell;

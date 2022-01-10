@@ -21,7 +21,7 @@ public class HoverTip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     [SerializeField]
     private SkillUsage _sklUsg;
 
-    private float timer;
+    public float timer;
 
     void Start()
     {

@@ -8,6 +8,7 @@ using UnityEngine.AI;
 public class BeingHP : NetworkBehaviour
 {
     public GameObject _holder;
+    public TextMeshPro _hpIndicator;
     private NetworkConnection _nt;
     public Rigidbody player;
     public SpriteRenderer _hpBar;
@@ -73,6 +74,8 @@ public class BeingHP : NetworkBehaviour
             _hpBar.color = Color.green;
             _hpBar.transform.localScale = new Vector3(startValueHP / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);
         }
+
+        _hpIndicator.text = actualHp.ToString();
     }
 
     public void Update()
@@ -82,10 +85,20 @@ public class BeingHP : NetworkBehaviour
 
         if (hpTimer >= _hpRegenTime && actualHp < maxHp)
         {
-            actualHp += _hpRegen;
-            HpColorSwitch();
+            if(actualHp + _hpRegen > maxHp)
+            {
+                actualHp = maxHp;
+            }
+            else
+            {
+                actualHp += _hpRegen;
+            }
+
+            if (isServer)
+                RPCHpColor();
             hpTimer = 0;
         }
+
         if (manaTimer >= _manaRegenTime && actualMana < maxMana)
         {
             actualMana += _manaRegen;
@@ -95,13 +108,18 @@ public class BeingHP : NetworkBehaviour
 
         if(isAttacked != false)
         {
-            isAttackedRecently();
+            if(isServer)
+                isAttackedRecently();
         }
     }
 
-    public int LoseHp(int loss, GameObject who)
+    [ClientRpc]
+    public void LoseHp(int loss, GameObject ownerOfAttack)
     {
+        if (!isServer) return;
+
         actualHp -= loss;
+        _hpIndicator.text = actualHp.ToString();
 
         _isAttackedTimer = 2;
         isAttacked = true;
@@ -110,28 +128,33 @@ public class BeingHP : NetworkBehaviour
         {
             if(_isMob)
             {
-                who.TryGetComponent(out PlayerLevel playerLevel);
-                playerLevel.AddExp(expValue);
+                if(isServer)
+                {
+                    ownerOfAttack.TryGetComponent(out PlayerLevel playerLevel);
+                    playerLevel.AddExp(expValue);
+                    ownerOfAttack.GetComponent<BeingHP>().HealUp();
+                }
             }
-
+             
             StartCoroutine(Respawn());
-            return actualHp;
         }
 
         ShowHpToPlayersSwitch(loss);
-
-        return actualHp;
     }
 
     public void ShowHpToPlayersSwitch(int loss)
     {
-        if (isClient)
-            CMDShowHpToPlayers(loss);
-        else
+        if(isServer)
+        {
             RPCShowHpToPlayers(loss);
+        }
+        else
+        {
+            CMDShowHpToPlayers(loss);
+        }
     }
 
-    [Command(requiresAuthority = false)]
+    [Command]
     void CMDShowHpToPlayers(int loss)
     {
         RPCShowHpToPlayers(loss);
@@ -140,9 +163,14 @@ public class BeingHP : NetworkBehaviour
     [ClientRpc]
     public void RPCShowHpToPlayers(int loss)
     {
-            HpColorSwitch();
-            _damageIndicatorInstance = Instantiate(_damageIndicator, gameObject.transform, false);
+        if(isServer)
+        {
+            RPCHpColor();
+
+            var _damageIndicatorInstance = Instantiate(_damageIndicator, gameObject.transform, false);
             _damageIndicatorInstance.text = loss.ToString();
+            NetworkServer.Spawn(_damageIndicatorInstance.gameObject);
+        }
     }
 
     public int LoseMana(int loss)
@@ -153,16 +181,8 @@ public class BeingHP : NetworkBehaviour
         return actualMana;
     }
 
-    public void HpColorSwitch()
-    {
-        if(isClient)
-            CMDHpColor();
-        else if(isServer)
-            RPCHpColor();
-    }
-
-    [Command(requiresAuthority = false)]
-    public void CMDHpColor()
+    [Command]
+    public void CmdHpColor()
     {
         RPCHpColor();
     }
@@ -170,7 +190,8 @@ public class BeingHP : NetworkBehaviour
     [ClientRpc]
     public void RPCHpColor()
     {
-        if(actualHp > maxHp/2)
+        
+        if (actualHp > maxHp/2)
         {
             _hpBar.color = Color.green;
         }
@@ -185,59 +206,110 @@ public class BeingHP : NetworkBehaviour
             _hpBar.color = Color.red;
         }
 
+        _hpIndicator.text = actualHp.ToString();
         _hpBar.transform.localScale = new Vector3(startValueHP / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);   
     }
 
+    [ClientRpc]
     public void HealUp()
     {
         actualHp = maxHp;
+        _hpIndicator.text = actualHp.ToString();
+
+        if (isServer)
+            RPCHpColor();
+        else
+            CmdHpColor();
     }
 
     public IEnumerator Respawn()
     {
-        if(_isNexus)
+        if(isServer)
         {
-            Destroy(gameObject);
-        }
-        else if(_isMob)
-        {
-            gameObject.transform.position = _startingPosition;
-            _navMeshAgent.enabled = false;
-            GetComponent<MeshRenderer>().enabled = false;
-            GetComponent<BeingHP>().enabled = false;
-            GetComponent<EnemyAttack>().enabled = false;
-            _holder.SetActive(false);
-            yield return new WaitForSeconds(mobRespawnTime);
-            _holder.SetActive(true);
-            _navMeshAgent.enabled = true;
-            GetComponent<MeshRenderer>().enabled = true;
-            GetComponent<BeingHP>().enabled = true;
-            actualHp = maxHp;
-            GetComponent<EnemyAttack>().enabled = true;
-            RPCHpColor();
-        }
-        else 
-        {
-            gameObject.transform.position = _startingPosition;
-            _navMeshAgent.enabled = false;
-            GetComponent<PlayerController>().enabled = false;
-            GetComponent<MeshRenderer>().enabled = false;
-            GetComponent<BeingHP>().enabled = false;
-            GetComponent<SkillUsage>().enabled = false;
-            _holder.SetActive(false);
-            yield return new WaitForSeconds(playerRespawnTime);
-            _holder.SetActive(true);
-            _navMeshAgent.enabled = true;
-            GetComponent<PlayerController>().enabled = true;
-            GetComponent<MeshRenderer>().enabled = true;
-            GetComponent<BeingHP>().enabled = true;
-            actualHp = maxHp;
-            HpColorSwitch();
-            GetComponent<SkillUsage>().enabled = true;
-            RPCHpColor();
+            if (_isNexus)
+            {
+                NexusDown();
+            }
+            else if (_isMob)
+            {
+                MobRespawn();
+
+                yield return new WaitForSeconds(mobRespawnTime);
+
+                MobRespawn2();
+            }
+            else
+            {
+                PlayerRespawn();
+
+                yield return new WaitForSeconds(playerRespawnTime);
+
+                PlayerRespawn2();
+            }
         }
     }
 
+    [ClientRpc]
+    void MobRespawn()
+    {
+        gameObject.transform.position = _startingPosition;
+        _navMeshAgent.enabled = false;
+        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<BeingHP>().enabled = false;
+        GetComponent<EnemyAttack>().enabled = false;
+        _holder.SetActive(false);
+    }
+
+    [ClientRpc]
+    void MobRespawn2()
+    {
+        _holder.SetActive(true);
+        _navMeshAgent.enabled = true;
+        GetComponent<MeshRenderer>().enabled = true;
+        GetComponent<BeingHP>().enabled = true;
+        actualHp = maxHp;
+        GetComponent<EnemyAttack>().enabled = true;
+        if (isServer)
+            RPCHpColor();
+        else
+            CmdHpColor();
+    }
+
+    [ClientRpc]
+    void PlayerRespawn()
+    {
+        gameObject.transform.position = _startingPosition;
+        _navMeshAgent.enabled = false;
+        GetComponent<PlayerController>().enabled = false;
+        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<BeingHP>().enabled = false;
+        GetComponent<SkillUsage>().enabled = false;
+        _holder.SetActive(false);
+    }
+
+    [ClientRpc]
+    void PlayerRespawn2()
+    {
+        _holder.SetActive(true);
+        _navMeshAgent.enabled = true;
+        GetComponent<PlayerController>().enabled = true;
+        GetComponent<MeshRenderer>().enabled = true;
+        GetComponent<BeingHP>().enabled = true;
+        actualHp = maxHp;
+        GetComponent<SkillUsage>().enabled = true;
+        if (isServer)
+            RPCHpColor();
+        else
+            CmdHpColor();
+    }
+
+    [ClientRpc]
+    void NexusDown()
+    {
+        Destroy(gameObject);
+    }
+
+    [ClientRpc]
     void isAttackedRecently()
     {
         if(_isAttackedTimer >= 0)

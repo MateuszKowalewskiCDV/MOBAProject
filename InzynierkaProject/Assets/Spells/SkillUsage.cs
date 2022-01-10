@@ -16,8 +16,6 @@ public class SkillUsage : NetworkBehaviour
 
     private bool _indicatorExiste;
 
-    private GameObject _prefabSkillInstance;
-
     [SyncVar]
     public bool cooldownReady;
 
@@ -63,7 +61,10 @@ public class SkillUsage : NetworkBehaviour
         {
             if (Input.GetKeyDown(_abilityKey) && cooldownReady == true)
             {
-                CMDUseBuff();
+                if (isServer)
+                    RPCUseBuff();
+                else
+                    CMDUseBuff();
             }
         }
     }
@@ -90,14 +91,20 @@ public class SkillUsage : NetworkBehaviour
     public void Shoot(Vector3 velocity)
     {
         if(isLocalPlayer)
-            CMDShootPrefab(velocity);
+            CMDShootPrefab(velocity, gameObject);
     }
 
     [Command]
     void CMDUseBuff()
     {
+        RPCUseBuff();
+    }
+
+    [ClientRpc]
+    void RPCUseBuff()
+    {
         StartCoroutine(CooldownApply());
-        _prefabSkillInstance = Instantiate(_prefabSkill, gameObject.transform, false);
+        var _prefabSkillInstance = (GameObject)Instantiate(_prefabSkill, gameObject.transform, false);
         if (_skill.spellName == "SpeedUp")
             _prefabSkillInstance.GetComponent<SpeedUpBuff>()._spell = _skill;
         if (_skill.spellName == "Grow")
@@ -105,24 +112,19 @@ public class SkillUsage : NetworkBehaviour
     }
 
     [Command]
-    void CMDShootPrefab(Vector3 velocityOfSkillshot)
+    void CMDShootPrefab(Vector3 velocityOfSkillshot, GameObject owner)
     {
-        RPCShootPrefab(velocityOfSkillshot);
-    }
-
-    [ClientRpc]
-    public void RPCShootPrefab(Vector3 velocityOfSkillshot)
-    {
-        _prefabSkillInstance = Instantiate(_prefabSkill, transform.position, Quaternion.identity);
+        var _prefabSkillInstance = (GameObject)Instantiate(_prefabSkill, transform.position, Quaternion.identity);
         _prefabSkillInstance.GetComponent<Rigidbody>().velocity = velocityOfSkillshot;
         Physics.IgnoreCollision(GetComponent<Collider>(), _prefabSkillInstance.GetComponent<Collider>());
 
         if (_skill.spellName == "Fireball")
         {
-            _prefabSkillInstance.GetComponent<FireballPrefab>().velocity = velocity;
+            _prefabSkillInstance.GetComponent<FireballPrefab>().velocity = velocityOfSkillshot;
             _prefabSkillInstance.GetComponent<FireballPrefab>()._spell = _skill;
             _prefabSkillInstance.GetComponent<FireballPrefab>().myTeam = gameObject.tag;
-            _prefabSkillInstance.GetComponent<FireballPrefab>().owner = gameObject;
+            _prefabSkillInstance.GetComponent<FireballPrefab>().ownerOfAttack = owner;
+            NetworkServer.Spawn(_prefabSkillInstance);
         }
     }
 

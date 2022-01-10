@@ -15,6 +15,8 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private Rigidbody _rb;
 
+    public GameObject movementIndicator;
+
     void Start()
     {
         if(isLocalPlayer)
@@ -39,10 +41,9 @@ public class PlayerController : NetworkBehaviour
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             
-            if(Physics.Raycast(ray, out hit))
+            if(Physics.Raycast(ray, out hit) && !hit.transform.gameObject.CompareTag("Enemy"))
             {
                 agent.SetDestination(hit.point);
-                //Instantiate(movementIndicator, hit);
             }
         }
     }
