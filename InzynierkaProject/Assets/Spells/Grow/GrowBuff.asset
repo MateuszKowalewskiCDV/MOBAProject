@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: GrowBuff
   m_EditorClassIdentifier: 
   spellName: Grow
-  description: Grow strong! Double size and  HP for 15s!
+  description: Grow strong! Double size and  HP for 15s. Leveling up while using
+    this ability gives you addictional 50 max HP.
   manaCost: 50
   cooldown: 60
   sprite: {fileID: 21300000, guid: 4e0ebf4d88c7ad642b81003a8775edc6, type: 3}

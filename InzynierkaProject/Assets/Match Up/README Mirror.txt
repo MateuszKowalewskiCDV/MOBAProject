@@ -1,0 +1,1 @@
+After importing Mirror, extract the MatchUpMirror.unitypackage to get access to the Mirror example scene and code.

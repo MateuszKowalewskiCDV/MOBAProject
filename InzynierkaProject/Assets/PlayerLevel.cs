@@ -19,6 +19,7 @@ public class PlayerLevel : NetworkBehaviour
     [SerializeField]
     private Image img;
     private BeingHP _bh;
+    public TextMeshPro playerLevel;
 
     void Start()
     {
@@ -32,39 +33,42 @@ public class PlayerLevel : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void AddExp(int exp)
+    public void AddExp(int exp, GameObject owner)
     {
         if(isServer)
         {
-            _exp += exp;
-            if (_exp >= _expValues[_level] && _level < 11)
+            var temporary = owner.GetComponent<PlayerLevel>();
+            temporary._exp += exp;
+            if (temporary._exp >= temporary._expValues[_level] && temporary._level < 11)
             {
-                GiveStats();
-                _exp = _exp - _expValues[_level];
-                _level += 2;
-                _levelIndicator.text = (_level).ToString();
-                _level -= 1;
-                _expSlider.maxValue = _expValues[_level];
+                GiveStats(owner);
+                temporary._exp = temporary._exp - temporary._expValues[temporary._level];
+                temporary._level += 2;
+                temporary.playerLevel.text = temporary._level.ToString();
+                temporary._levelIndicator.text = temporary._level.ToString();
+                temporary._level -= 1;
+                temporary._expSlider.maxValue = temporary._expValues[temporary._level];
             }
-            _expSlider.value = _exp;
-            if (_level >= 11)
+            temporary._expSlider.value = temporary._exp;
+            if (temporary._level >= 11)
             {
-                bg.SetActive(false);
-                sld.SetActive(false);
-                img.color = Color.grey;
+                temporary.bg.SetActive(false);
+                temporary.sld.SetActive(false);
+                temporary.img.color = Color.grey;
                 return;
             }
         }
     }
 
     [ClientRpc]
-    public void GiveStats()
+    public void GiveStats(GameObject owner)
     {
-        _bh.maxHp += 100;
+        owner.GetComponent<BeingHP>().maxHp += 100;
+        owner.GetComponent<BeingHP>().HealUp();
 
         if (isServer)
-            _bh.RPCHpColor();
+            owner.GetComponent<BeingHP>().RPCHpColor();
         else
-            _bh.CmdHpColor();
+            owner.GetComponent<BeingHP>().CmdHpColor();
     }
 }

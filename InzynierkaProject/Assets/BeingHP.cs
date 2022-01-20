@@ -131,8 +131,7 @@ public class BeingHP : NetworkBehaviour
                 if(isServer)
                 {
                     ownerOfAttack.TryGetComponent(out PlayerLevel playerLevel);
-                    playerLevel.AddExp(expValue);
-                    ownerOfAttack.GetComponent<BeingHP>().HealUp();
+                    playerLevel.AddExp(expValue, ownerOfAttack);
                 }
             }
              

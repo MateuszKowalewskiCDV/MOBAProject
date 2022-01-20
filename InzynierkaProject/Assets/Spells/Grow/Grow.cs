@@ -11,6 +11,7 @@ public class Grow : MonoBehaviour
     [SerializeField]
     private AudioSource _as;
     private BeingHP _playerHP;
+    private int maxHpHolder;
 
     void Start()
     {
@@ -22,12 +23,13 @@ public class Grow : MonoBehaviour
 
     IEnumerator GrowBuffApply()
     {
+        maxHpHolder = _playerHP.maxHp;
         _player.localScale *= _spell.buffValue;
-        _playerHP.maxHp *= 2;
-        _playerHP.actualHp += _playerHP.maxHp / 2;
+        _playerHP.maxHp += maxHpHolder;
+        _playerHP.actualHp += maxHpHolder;
         yield return new WaitForSeconds(_spell.duration);
         _player.localScale /= _spell.buffValue;
-        _playerHP.maxHp /= 2;
+        _playerHP.maxHp -= maxHpHolder;
         if(_playerHP.actualHp > _playerHP.maxHp)
         {
             _playerHP.actualHp = _playerHP.maxHp;
