@@ -1433,11 +1433,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2115450334824123825, guid: d4b17069b6b61d845a3b319a75b17e51, type: 3}
   m_PrefabInstance: {fileID: 865175628}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &402060820 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1793149055284719699, guid: d4b17069b6b61d845a3b319a75b17e51, type: 3}
-  m_PrefabInstance: {fileID: 865175628}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &402060821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2388,6 +2383,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 554310738}
   m_CullTransparentMesh: 0
+--- !u!1 &612652908
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 612652909}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &612652909
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612652908}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -370.29623, y: -366.80743, z: -666.6843}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 34
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &655598907
 GameObject:
   m_ObjectHideFlags: 0
@@ -6860,7 +6885,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1996975254}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54e4f62e47d6a284f91880b8cf7ea130, type: 3}
+  m_Script: {fileID: 11500000, guid: 8aab4c8111b7c411b9b92cf3dbc5bd4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
@@ -6875,7 +6900,7 @@ MonoBehaviour:
   transport: {fileID: 1996975255}
   networkAddress: localhost
   maxConnections: 16
-  disconnectInactiveConnections: 0
+  disconnectInactiveConnections: 1
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 131501495401080656, guid: 741eaa5c71429cb42a3c53cb936fddf9, type: 3}
@@ -6886,14 +6911,12 @@ MonoBehaviour:
   - {fileID: 3111408068730742980, guid: 6159cd080c34577499a1e6c338201d37, type: 3}
   - {fileID: 3546753988932658321, guid: 76ef7c080ee993a478e87a44dd4b83db, type: 3}
   - {fileID: 2898712499502264413, guid: dc14f26398b1a3f4786b9765589893d2, type: 3}
+  - {fileID: 4663161757411935922, guid: 1b5ab2c2412e63c4b9783976221d2102, type: 3}
+  - {fileID: 1169168458513570279, guid: 17da737d2e8fe3e4da44d1cf8f06d012, type: 3}
   - {fileID: 2193905896654284029, guid: d2e2739c33f58cf4bae06f5af333acac, type: 3}
   - {fileID: 2299032742196014873, guid: 7a5cb28a09129df4cb675f28fa0f11ba, type: 3}
   - {fileID: 5666057577092011334, guid: 727e224cec5e1a441a3bec25b346f230, type: 3}
   - {fileID: 3063221761202057587, guid: 5864c304f149a9b43a57d6c1c98b39bd, type: 3}
-  - {fileID: 4663161757411935922, guid: 1b5ab2c2412e63c4b9783976221d2102, type: 3}
-  - {fileID: 1169168458513570279, guid: 17da737d2e8fe3e4da44d1cf8f06d012, type: 3}
-  playerSpawnPosition1: {fileID: 402060820}
-  playerSpawnPosition2: {fileID: 0}
 --- !u!4 &1996975257
 Transform:
   m_ObjectHideFlags: 0
