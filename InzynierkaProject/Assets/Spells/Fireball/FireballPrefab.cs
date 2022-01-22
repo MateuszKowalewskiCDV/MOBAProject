@@ -83,9 +83,9 @@ public class FireballPrefab : NetworkBehaviour
         if (collision.gameObject.CompareTag(team1) || collision.gameObject.CompareTag(team2) || collision.gameObject.CompareTag(team3))
         {
             if (isLocalPlayer)
-                CmdTeammateHit(collision.gameObject);
+                CmdEnemyPlayerHit(collision.gameObject);
             if (isServer)
-                RpcTeammateHit(collision.gameObject);
+                RpcEnemyPlayerHit(collision.gameObject);
         }
         if(!collision.gameObject.CompareTag(myTeam))
         {
@@ -108,10 +108,10 @@ public class FireballPrefab : NetworkBehaviour
     }
 
     [Command]
-    public void CmdMobHit(GameObject collision)
+    public void CmdEnemyPlayerHit(GameObject collision)
     {
         if (isServer) return;
-            RpcMobHit(collision);
+            RpcEnemyPlayerHit(collision);
     }
 
     [ClientRpc]
@@ -138,14 +138,17 @@ public class FireballPrefab : NetworkBehaviour
     }
 
     [ClientRpc]
-    public void RpcMobHit(GameObject collision)
+    public void RpcEnemyPlayerHit(GameObject collision)
     {
-        collision.gameObject.TryGetComponent(out BeingHP being);
-        if (being)
+        if (isServer)
         {
-            being.LoseHp(_spell.damage, ownerOfAttack);
+            collision.gameObject.TryGetComponent(out BeingHP being);
+            if (being)
+            {
+                being.LoseHp(_spell.damage, ownerOfAttack);
+            }
+            StartCoroutine(EndLifeHit());
         }
-        StartCoroutine(EndLifeHit());
     }
 
     IEnumerator EndLifeHit()

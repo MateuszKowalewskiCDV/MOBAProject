@@ -1,13 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
+using Mirror;
 
 namespace MatchUp.Examples.Basic
 {
-    // Utilize the MatchUp Matchmaker to perform matchmaking
+
     [RequireComponent(typeof(Matchmaker))]
     public class ExampleBasicMatchmaker : MonoBehaviour
     {
+        public Image characterSelect;
+        public GameObject teamChoose;
+        public NetworkManager nt;
+
         // A reference to the MatchUp Matchmaker component that will be used for matchmaking
         Matchmaker matchUp;
 
@@ -109,13 +115,13 @@ namespace MatchUp.Examples.Basic
 
             // You can set MatchData when creating the match. (string, float, double, int, or long)
             var matchData = new Dictionary<string, MatchData>() {
-                { "Match name", "Layla's Match" },
+                { "Match name", "Serwer Projektu In¿ynierskiego" },
                 { "Host Address", hostAddress },
                 { "Host Port", hostPort }
             };
 
             // Create the Match with the associated MatchData
-            matchUp.CreateMatch(10, matchData, OnMatchCreated);
+            matchUp.CreateMatch(16, matchData, OnMatchCreated);
         }
 
         // Called when a response is received from the CreateMatch request.
@@ -126,6 +132,10 @@ namespace MatchUp.Examples.Basic
                 isHost = true;
 
                 Debug.Log("Created match: " + match.matchData["Match name"]);
+                
+                teamChoose.SetActive(true);
+                nt.StartHost();
+                characterSelect.enabled = true;
             }
         }
 
@@ -160,11 +170,10 @@ namespace MatchUp.Examples.Basic
 
             Debug.Log("Joined match: " + match.matchData["Match name"] + " " + hostAddress + ":" + hostPort);
 
-            // This is where you would join the host using your preferred networking system
-            // For example for UNet it would look something like:
-            // NetworkManager.singleton.networkAddress = hostAddress;
-            // NetworkManager.singleton.networkPort = hostPort;
-            // NetworkManager.singleton.StartClient();
+            teamChoose.SetActive(true);
+
+            nt.networkAddress = hostAddress;
+            nt.StartClient();
         }
 
         // Disconnect and leave the Match

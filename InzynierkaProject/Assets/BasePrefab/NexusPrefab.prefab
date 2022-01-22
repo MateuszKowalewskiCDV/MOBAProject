@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6881559695562607550}
   - component: {fileID: 9146250964171292764}
   - component: {fileID: 5128797797094583746}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: HP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28,7 +28,7 @@ RectTransform:
   m_GameObject: {fileID: 1550343834995274967}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9069330658020602272}
   m_RootOrder: 4
@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 9069330658018016900}
   - component: {fileID: 9069330658018016902}
   - component: {fileID: 9069330658018016901}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: hpBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -305,13 +305,12 @@ GameObject:
   - component: {fileID: 9069330658020602272}
   - component: {fileID: 9069330658020602273}
   - component: {fileID: 9069330658020602274}
-  - component: {fileID: 9069330658020602275}
   - component: {fileID: 9069330658020602284}
   - component: {fileID: 9069330658020602279}
   - component: {fileID: 9069330658020602278}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: NexusPrefab
-  m_TagString: Untagged
+  m_TagString: RedTeam
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -384,19 +383,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &9069330658020602275
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9069330658020602285}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &9069330658020602284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -420,7 +406,7 @@ MonoBehaviour:
   maxMana: 0
   actualHp: 500
   actualMana: 0
-  _hpRegen: 0
+  _hpRegen: 2
   _manaRegen: 0
   _damageIndicator: {fileID: 929647590835587702, guid: 17da737d2e8fe3e4da44d1cf8f06d012, type: 3}
   _damageIndicatorInstance: {fileID: 0}
@@ -477,7 +463,7 @@ GameObject:
   - component: {fileID: 9069330658290971826}
   - component: {fileID: 9069330658290971836}
   - component: {fileID: 9069330658290971827}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: manaBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -629,6 +615,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: nexus01
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2bf130a4ef0f8f144a5aa512d0e22e72, type: 3}
+      propertyPath: m_Layer
+      value: 17
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2bf130a4ef0f8f144a5aa512d0e22e72, type: 3}
 --- !u!4 &3390444244206071689 stripped
@@ -702,6 +692,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 86b4a3a417237514788ac056b1c4747e, type: 3}
       propertyPath: m_Name
       value: crystal02
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 86b4a3a417237514788ac056b1c4747e, type: 3}
+      propertyPath: m_Layer
+      value: 17
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86b4a3a417237514788ac056b1c4747e, type: 3}
