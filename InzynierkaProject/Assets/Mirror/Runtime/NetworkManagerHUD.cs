@@ -52,7 +52,7 @@ namespace Mirror
                         NetworkClient.AddPlayer();
                     }
                 }
-            }
+            }   
 
             StopButtons();
 

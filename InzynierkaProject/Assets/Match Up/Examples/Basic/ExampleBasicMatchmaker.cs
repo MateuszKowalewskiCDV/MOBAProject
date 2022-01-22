@@ -173,20 +173,19 @@ namespace MatchUp.Examples.Basic
 
             Debug.Log("Joined match: " + match.matchData["Match name"] + " " + hostAddress + ":" + hostPort);
 
-
-
-            nt.StartClient();
-
-
-            NetworkClient.Ready();
-            if (NetworkClient.localPlayer == null)
+            if (!NetworkClient.isConnected && !NetworkServer.active)
             {
-                NetworkClient.AddPlayer();
+                nt.StartClient();
             }
 
-            characterSelect.SetActive(false);
-            teamChoose.SetActive(false);
-
+            if (NetworkClient.isConnected && !NetworkClient.ready)
+            {
+                NetworkClient.Ready();
+                if (NetworkClient.localPlayer == null)
+                {
+                    NetworkClient.AddPlayer();
+                }
+            }
         }
 
         // Disconnect and leave the Match
