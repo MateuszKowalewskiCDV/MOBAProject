@@ -2560,7 +2560,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!224 &675754902
 RectTransform:
@@ -3450,7 +3450,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c225fa1e3bf06f4b9d3753a8d2e254d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterSelect: {fileID: 890975578}
+  characterSelect: {fileID: 890975576}
   teamChoose: {fileID: 1117631397}
   nt: {fileID: 1996975256}
 --- !u!114 &821934251
@@ -6841,7 +6841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Port: 7777
+  Port: 12345
   NoDelay: 1
   Interval: 10
   FastResend: 2
@@ -6870,11 +6870,11 @@ MonoBehaviour:
   serverTickRate: 60
   serverBatching: 1
   serverBatchInterval: 0
-  offlineScene: Assets/Scenes/Offline.unity
+  offlineScene: Assets/Scenes/JoinRoom.unity
   onlineScene: Assets/Scenes/MOBA.unity
   transport: {fileID: 1996975255}
   networkAddress: localhost
-  maxConnections: 100
+  maxConnections: 16
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}

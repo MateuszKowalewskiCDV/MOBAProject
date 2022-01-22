@@ -10,9 +10,9 @@ namespace MatchUp.Examples.Basic
     [RequireComponent(typeof(Matchmaker))]
     public class ExampleBasicMatchmaker : MonoBehaviour
     {
-        public Image characterSelect;
-        public GameObject teamChoose;
+        public GameObject characterSelect, teamChoose;
         public NetworkManager nt;
+        public NetworkConnection conn;
 
         // A reference to the MatchUp Matchmaker component that will be used for matchmaking
         Matchmaker matchUp;
@@ -115,7 +115,7 @@ namespace MatchUp.Examples.Basic
 
             // You can set MatchData when creating the match. (string, float, double, int, or long)
             var matchData = new Dictionary<string, MatchData>() {
-                { "Match name", "Serwer Projektu In¿ynierskiego" },
+                { "Match name", "Serwer Projektu Inzynierskiego" },
                 { "Host Address", hostAddress },
                 { "Host Port", hostPort }
             };
@@ -133,9 +133,10 @@ namespace MatchUp.Examples.Basic
 
                 Debug.Log("Created match: " + match.matchData["Match name"]);
                 
-                teamChoose.SetActive(true);
                 nt.StartHost();
-                characterSelect.enabled = true;
+
+                characterSelect.SetActive(false);
+                teamChoose.SetActive(false);
             }
         }
 
@@ -168,12 +169,24 @@ namespace MatchUp.Examples.Basic
             hostAddress = match.matchData["Host Address"];
             hostPort = match.matchData["Host Port"];
 
+            nt.networkAddress = hostAddress;
+
             Debug.Log("Joined match: " + match.matchData["Match name"] + " " + hostAddress + ":" + hostPort);
 
-            teamChoose.SetActive(true);
 
-            nt.networkAddress = hostAddress;
+
             nt.StartClient();
+
+
+            NetworkClient.Ready();
+            if (NetworkClient.localPlayer == null)
+            {
+                NetworkClient.AddPlayer();
+            }
+
+            characterSelect.SetActive(false);
+            teamChoose.SetActive(false);
+
         }
 
         // Disconnect and leave the Match
