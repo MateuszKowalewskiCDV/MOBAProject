@@ -106,12 +106,11 @@ namespace MatchUp.Examples.Basic
         // Host a match
         void HostAMatch()
         {
-            // Start hosting here using whatever networking system you use
-            // For example if you were using UNet you would call something like NetworkManager.StartHost() here
+            nt.StartHost();
 
             // Once you have the host's connection info add it as match data and create the match
             hostAddress = Matchmaker.externalIP;
-            hostPort = 12345;
+            hostPort = 20205;
 
             // You can set MatchData when creating the match. (string, float, double, int, or long)
             var matchData = new Dictionary<string, MatchData>() {
@@ -132,8 +131,6 @@ namespace MatchUp.Examples.Basic
                 isHost = true;
 
                 Debug.Log("Created match: " + match.matchData["Match name"]);
-                
-                nt.StartHost();
 
                 characterSelect.SetActive(false);
                 teamChoose.SetActive(false);

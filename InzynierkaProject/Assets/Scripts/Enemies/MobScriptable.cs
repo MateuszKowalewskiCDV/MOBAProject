@@ -16,5 +16,6 @@ public class MobScriptable : ScriptableObject
     public float attackSpeed;
     public float range;
     public float followRange;
+    public int expValue;
     public GameObject enemyPrefab;
 }

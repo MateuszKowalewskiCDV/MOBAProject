@@ -7,6 +7,7 @@ using UnityEngine.AI;
 
 public class BeingHP : NetworkBehaviour
 {
+    public int attackBoost;
     public GameObject _holder;
     public TextMeshPro _hpIndicator;
     private NetworkConnection _nt;
@@ -33,8 +34,6 @@ public class BeingHP : NetworkBehaviour
 
     public TextMeshPro _damageIndicator, _damageIndicatorInstance;
 
-    private float startValueHP, startValueMANA;
-
     public bool _isMob, isAttacked, _isNexus;
     public float _isAttackedTimer;
     public MobScriptable _mob;
@@ -47,32 +46,37 @@ public class BeingHP : NetworkBehaviour
     public int playerRespawnTime;
     public int mobRespawnTime;
 
-    public int expValue;
+    public bool isAlive;
 
     public void Start()
     {
+        isAlive = true;
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _startingPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z);
 
         if (_isMob)
         {
-            startValueHP = _hpBar.transform.localScale.x;
-            startValueMANA = _manaBar.transform.localScale.x;
             actualHp = _mob.hp;
             _manaBar.gameObject.SetActive(false);
             player = GetComponent<Rigidbody>();
             _hpBar.color = Color.green;
-            _hpBar.transform.localScale = new Vector3(startValueHP / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);
+            _hpBar.transform.localScale = new Vector3(0.08f / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);
+        }
+        else if(_isNexus)
+        {
+            actualHp = maxHp;
+            player = GetComponent<Rigidbody>();
+            _hpBar.color = Color.green;
+            _hpBar.transform.localScale = new Vector3(0.08f / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);
         }
         else
         {
-            startValueHP = _hpBar.transform.localScale.x;
-            startValueMANA = _manaBar.transform.localScale.x;
             actualHp = maxHp;
             actualMana = maxMana;
             player = GetComponent<Rigidbody>();
             _hpBar.color = Color.green;
-            _hpBar.transform.localScale = new Vector3(startValueHP / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);
+            _hpBar.transform.localScale = new Vector3(0.08f / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);
+            _manaBar.transform.localScale = new Vector3(0.08f / maxMana * actualMana, _manaBar.transform.localScale.y, _manaBar.transform.localScale.z);
         }
 
         _hpIndicator.text = actualHp.ToString();
@@ -102,7 +106,7 @@ public class BeingHP : NetworkBehaviour
         if (manaTimer >= _manaRegenTime && actualMana < maxMana)
         {
             actualMana += _manaRegen;
-            _manaBar.transform.localScale = new Vector3(startValueMANA / maxMana * actualMana, _manaBar.transform.localScale.y, _manaBar.transform.localScale.z);
+            _manaBar.transform.localScale = new Vector3(0.08f / maxMana * actualMana, _manaBar.transform.localScale.y, _manaBar.transform.localScale.z);
             manaTimer = 0;
         }
 
@@ -131,7 +135,7 @@ public class BeingHP : NetworkBehaviour
                 if(isServer)
                 {
                     ownerOfAttack.TryGetComponent(out PlayerLevel playerLevel);
-                    playerLevel.AddExp(expValue, ownerOfAttack);
+                    playerLevel.AddExp(_mob.expValue, ownerOfAttack);
                 }
             }
              
@@ -175,7 +179,7 @@ public class BeingHP : NetworkBehaviour
     public int LoseMana(int loss)
     {
         actualMana = actualMana - loss;
-        _manaBar.transform.localScale = new Vector3(startValueMANA / maxMana * actualMana, _manaBar.transform.localScale.y, _manaBar.transform.localScale.z);
+        _manaBar.transform.localScale = new Vector3(0.08f / maxMana * actualMana, _manaBar.transform.localScale.y, _manaBar.transform.localScale.z);
 
         return actualMana;
     }
@@ -206,7 +210,7 @@ public class BeingHP : NetworkBehaviour
         }
 
         _hpIndicator.text = actualHp.ToString();
-        _hpBar.transform.localScale = new Vector3(startValueHP / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);   
+        _hpBar.transform.localScale = new Vector3(0.08f / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);
     }
 
     [ClientRpc]
@@ -251,19 +255,23 @@ public class BeingHP : NetworkBehaviour
     [ClientRpc]
     void MobRespawn()
     {
+        isAlive = false;
         gameObject.transform.position = _startingPosition;
         _navMeshAgent.enabled = false;
         GetComponent<MeshRenderer>().enabled = false;
         GetComponent<BeingHP>().enabled = false;
         GetComponent<EnemyAttack>().enabled = false;
+        GetComponent<CapsuleCollider>().enabled = false;
         _holder.SetActive(false);
     }
 
     [ClientRpc]
     void MobRespawn2()
     {
+        isAlive = true;
         _holder.SetActive(true);
         _navMeshAgent.enabled = true;
+        GetComponent<CapsuleCollider>().enabled = true;
         GetComponent<MeshRenderer>().enabled = true;
         GetComponent<BeingHP>().enabled = true;
         actualHp = maxHp;
@@ -277,6 +285,7 @@ public class BeingHP : NetworkBehaviour
     [ClientRpc]
     void PlayerRespawn()
     {
+        isAlive = false;
         gameObject.transform.position = _startingPosition;
         _navMeshAgent.enabled = false;
         GetComponent<PlayerController>().enabled = false;
@@ -289,6 +298,7 @@ public class BeingHP : NetworkBehaviour
     [ClientRpc]
     void PlayerRespawn2()
     {
+        isAlive = true;
         _holder.SetActive(true);
         _navMeshAgent.enabled = true;
         GetComponent<PlayerController>().enabled = true;

@@ -124,6 +124,7 @@ public class SkillUsage : NetworkBehaviour
             _prefabSkillInstance.GetComponent<FireballPrefab>()._spell = _skill;
             _prefabSkillInstance.GetComponent<FireballPrefab>().myTeam = gameObject.tag;
             _prefabSkillInstance.GetComponent<FireballPrefab>().ownerOfAttack = owner;
+            _prefabSkillInstance.GetComponent<FireballPrefab>()._bh = GetComponent<BeingHP>();
             NetworkServer.Spawn(_prefabSkillInstance);
         }
     }

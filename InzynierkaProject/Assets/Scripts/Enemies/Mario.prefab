@@ -373,7 +373,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6dc4704f00e22fc45a8280a10d85dcb4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -521,6 +521,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  attackBoost: 0
   _holder: {fileID: 961276118625796066}
   _hpIndicator: {fileID: 8373590519295951159}
   player: {fileID: 4663161757411935930}
@@ -528,7 +529,7 @@ MonoBehaviour:
   _manaBar: {fileID: 5190029916569446387}
   maxHp: 200
   maxMana: 100
-  actualHp: 0
+  actualHp: 200
   actualMana: 0
   _hpRegen: 1
   _manaRegen: 1
@@ -538,11 +539,11 @@ MonoBehaviour:
   isAttacked: 0
   _isNexus: 0
   _isAttackedTimer: 0
-  _mob: {fileID: 11400000, guid: b9b0e91d574ee634c828ae753fc5fa44, type: 2}
+  _mob: {fileID: 11400000, guid: 3ee5758b86af206449ec486d860aa5e8, type: 2}
   myBushNumber: 0
   playerRespawnTime: 0
   mobRespawnTime: 30
-  expValue: 100
+  isAlive: 0
 --- !u!195 &4663161757411935929
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -780,8 +781,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.03, y: -0.76}
-  m_SizeDelta: {x: 2, y: 1}
+  m_AnchoredPosition: {x: 0.03, y: -0.945}
+  m_SizeDelta: {x: 4, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &3205715969232108053
 MeshRenderer:
@@ -871,8 +872,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 10
-  m_fontSizeBase: 10
+  m_fontSize: 8
+  m_fontSizeBase: 8
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
