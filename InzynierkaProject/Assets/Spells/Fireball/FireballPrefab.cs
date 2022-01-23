@@ -19,6 +19,7 @@ public class FireballPrefab : NetworkBehaviour
     public SphereCollider sc;
     public Vector3 velocity;
     public Rigidbody rb;
+    public BeingHP _bh;
 
     public void Awake()
     {
@@ -122,7 +123,7 @@ public class FireballPrefab : NetworkBehaviour
             collision.gameObject.TryGetComponent(out BeingHP being);
             if (being)
             {
-                being.LoseHp(_spell.damage, ownerOfAttack);
+                being.LoseHp(_spell.damage + _bh.attackBoost, ownerOfAttack);
             }
             StartCoroutine(EndLifeHit());
         }
@@ -145,7 +146,7 @@ public class FireballPrefab : NetworkBehaviour
             collision.gameObject.TryGetComponent(out BeingHP being);
             if (being)
             {
-                being.LoseHp(_spell.damage, ownerOfAttack);
+                being.LoseHp(_spell.damage + _bh.attackBoost, ownerOfAttack);
             }
             StartCoroutine(EndLifeHit());
         }

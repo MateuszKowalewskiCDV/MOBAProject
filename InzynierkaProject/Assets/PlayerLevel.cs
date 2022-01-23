@@ -64,6 +64,7 @@ public class PlayerLevel : NetworkBehaviour
     public void GiveStats(GameObject owner)
     {
         owner.GetComponent<BeingHP>().maxHp += 100;
+        owner.GetComponent<BeingHP>().attackBoost += 10;
         owner.GetComponent<BeingHP>().HealUp();
 
         if (isServer)

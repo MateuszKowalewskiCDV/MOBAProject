@@ -10,7 +10,7 @@ public class AutoAttack : NetworkBehaviour
     public float autoAttackRange;
     public OutlineOnMouseOver oomo;
     public GameObject enemy;
-    public BeingHP _bh;
+    public BeingHP _bh, _playerBh;
     public bool autoReady;
     public bool isProjectile;
     public GameObject projectile;
@@ -18,6 +18,7 @@ public class AutoAttack : NetworkBehaviour
 
     public void Start()
     {
+        _playerBh = GetComponent<BeingHP>();
         timer = 0;
     }
 
@@ -49,7 +50,7 @@ public class AutoAttack : NetworkBehaviour
         }
         else if(autoReady == true && oomo != null)
         {
-            if (oomo._isChoosen == true && Vector3.Distance(oomo.gameObject.transform.position, gameObject.transform.position) <= autoAttackRange)
+            if (oomo._isChoosen == true && _bh.isAlive && Vector3.Distance(oomo.gameObject.transform.position, gameObject.transform.position) <= autoAttackRange)
             {
                 CmdDealDamage();
                 timer = autoattackSpeed;
@@ -72,7 +73,7 @@ public class AutoAttack : NetworkBehaviour
     {
         if(isServer)
         {
-            _bh.LoseHp(autoAttackDamage, gameObject);
+            _bh.LoseHp(autoAttackDamage + _playerBh.attackBoost, gameObject);
             if (isProjectile == true)
             {
                 var prefabProjectile = (GameObject)Instantiate(projectile, gameObject.transform, false);
