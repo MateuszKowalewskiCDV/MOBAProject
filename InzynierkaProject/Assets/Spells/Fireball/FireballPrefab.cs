@@ -118,15 +118,15 @@ public class FireballPrefab : NetworkBehaviour
     [ClientRpc]
     public void RpcEnemyHit(GameObject collision)
     {
-        if(isServer)
-        {
+        //if(isServer)
+        //{
             collision.gameObject.TryGetComponent(out BeingHP being);
             if (being)
             {
                 being.LoseHp(_spell.damage + _bh.attackBoost, ownerOfAttack);
             }
             StartCoroutine(EndLifeHit());
-        }
+        //}
     }
 
     [ClientRpc]
