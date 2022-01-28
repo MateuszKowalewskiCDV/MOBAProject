@@ -14,13 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: Mushroom
   description: "Uwa\u017Caj, potrafi mocno uderzy\u0107. Ma\u0142y zasi\u0119g."
-  hp: 200
+  hp: 500
   mana: 0
   spawnTime: 1
   sprite: {fileID: 21300000, guid: 6c50d8b67d71d0446995a0ce24b4a5e8, type: 3}
   speed: 2
-  damage: 10
+  damage: 50
   attackSpeed: 1
   range: 2
   followRange: 15
-  enemyPrefab: {fileID: 2017495061973453731, guid: 22b7814ca2afdd04b904e2a585b92756, type: 3}
+  expValue: 300
+  enemyPrefab: {fileID: 6753945534231478732, guid: 7ebd60b95af1faa49aa8146bac93c503, type: 3}

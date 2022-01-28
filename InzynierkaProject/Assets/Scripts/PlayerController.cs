@@ -9,16 +9,18 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private Camera cam;
 
-    [SerializeField]
-    private NavMeshAgent agent;
+    public NavMeshAgent agent;
 
     [SerializeField]
     private Rigidbody _rb;
 
     public GameObject movementIndicator;
 
+    public AutoAttack aa;
+
     void Start()
     {
+        aa = GetComponent<AutoAttack>();
         if(isLocalPlayer)
         {
             gameObject.layer = 8;
@@ -55,5 +57,15 @@ public class PlayerController : NetworkBehaviour
     void OnCollisionExit(Collision collision)
     {
         _rb.isKinematic = false;
+    }
+
+    public void OnAttack(GameObject enemy)
+    {
+        agent.SetDestination(enemy.transform.position);
+    }
+
+    public void OnAttackRange()
+    {
+        agent.SetDestination(transform.position);
     }
 }

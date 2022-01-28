@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using UnityEngine.UI;
 using Mirror;
+using System.Collections;
 
 namespace MatchUp.Examples.Basic
 {
@@ -13,6 +14,8 @@ namespace MatchUp.Examples.Basic
         public GameObject characterSelect, teamChoose;
         public NetworkManager nt;
         public NetworkConnection conn;
+        private int j;
+        public bool serverIsHere;
 
         // A reference to the MatchUp Matchmaker component that will be used for matchmaking
         Matchmaker matchUp;
@@ -22,15 +25,23 @@ namespace MatchUp.Examples.Basic
         Match[] matches;
 
         bool isHost, isClient;
-
+        public bool isServer;
+        public int counter;
         string hostAddress;
         int hostPort;
 
         // Get a references to components we will use often
         void Awake()
         {
+            counter = 0;
             matchUp = GetComponent<Matchmaker>();
             matchUp.onLostConnectionToMatchmakingServer = OnLostConnectionToMatchmakingServer;
+        }
+
+        public void Start()
+        {
+            if(isServer)
+                StartCoroutine(OdpalSerwer());
         }
 
         // If connection to the matchmaking server is lost then shutdown the host or client
@@ -110,11 +121,11 @@ namespace MatchUp.Examples.Basic
 
             // Once you have the host's connection info add it as match data and create the match
             hostAddress = Matchmaker.externalIP;
-            hostPort = 20205;
+            hostPort = 20000;
 
             // You can set MatchData when creating the match. (string, float, double, int, or long)
             var matchData = new Dictionary<string, MatchData>() {
-                { "Match name", "Serwer Projektu Inzynierskiego" },
+                { "Match name", "Hosted server"},
                 { "Host Address", hostAddress },
                 { "Host Port", hostPort }
             };
@@ -204,9 +215,21 @@ namespace MatchUp.Examples.Basic
                 Debug.Log("Left match");
                 isClient = false;
                 matchUp.LeaveMatch();
+                counter--;
+                if(counter == 0)
+                {
+                    matchUp.DestroyMatch();
+                    HostAMatch();
+                }
 
                 // Do whatever you need to here to disconnect the client
             }
+        }
+
+        IEnumerator OdpalSerwer()
+        {
+            yield return new WaitForSeconds(2);
+            HostAMatch();
         }
     }
 }

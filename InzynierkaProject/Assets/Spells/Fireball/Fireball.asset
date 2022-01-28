@@ -15,11 +15,11 @@ MonoBehaviour:
   spellName: Fireball
   description: "Strzelasz ognistym p\u0142omieniem"
   manaCost: 40
-  cooldown: 1
+  cooldown: 5
   sprite: {fileID: 21300000, guid: 58fe2555806d1c743b21de2003ec4df5, type: 3}
   skillType: skillshot
   speed: 20
-  damage: 20
+  damage: 100
   range: 2
   castableOnAlly: 0
   buffValue: 0

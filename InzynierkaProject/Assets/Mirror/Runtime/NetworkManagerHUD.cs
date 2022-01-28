@@ -13,6 +13,7 @@ namespace Mirror
     public class NetworkManagerHUD : MonoBehaviour
     {
         NetworkManager manager;
+        private bool isServer = false;
 
         [Obsolete("showGUI will be removed unless someone has a valid use case. Simply use or don't use the HUD component.")]
         public bool showGUI = true;

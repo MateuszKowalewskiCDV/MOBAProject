@@ -14,13 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: Mario
   description: Jestem Mario
-  hp: 1000
+  hp: 200
   mana: 200
   spawnTime: 20
   sprite: {fileID: 21300000, guid: bdc187a6809dbbf46952db8c83045ddd, type: 3}
   speed: 4
-  damage: 5
+  damage: 10
   attackSpeed: 0.2
   range: 2
   followRange: 15
-  enemyPrefab: {fileID: 2017495061973453731, guid: 22b7814ca2afdd04b904e2a585b92756, type: 3}
+  expValue: 100
+  enemyPrefab: {fileID: 4663161757411935922, guid: 1b5ab2c2412e63c4b9783976221d2102, type: 3}

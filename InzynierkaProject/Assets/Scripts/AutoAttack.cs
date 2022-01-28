@@ -15,6 +15,7 @@ public class AutoAttack : NetworkBehaviour
     public bool isProjectile;
     public GameObject projectile;
     private float timer;
+    private bool targeted;
 
     public void Start()
     {
@@ -34,10 +35,30 @@ public class AutoAttack : NetworkBehaviour
                 if(hit.transform.gameObject.CompareTag("Enemy"))
                 {
                     enemy = hit.transform.gameObject;
-                    hit.transform.gameObject.TryGetComponent(out oomo);
+                    oomo = hit.transform.gameObject.GetComponentInChildren<OutlineOnMouseOver>();
+                    oomo.pc = GetComponent<PlayerController>();
                     _bh = oomo.GetComponent<BeingHP>();
+                    if (Vector3.Distance(transform.position, enemy.transform.position) <= autoAttackRange && enemy != null)
+                    {
+                        oomo.pc.agent.SetDestination(transform.position);
+                    }
+                    else
+                    {
+                        targeted = true;
+                        oomo.pc.OnAttack(enemy.GetComponent<Transform>().gameObject);
+                    }
                 }
             }
+        }
+
+        if (targeted == true)
+        {
+            if (Vector3.Distance(transform.position, enemy.transform.position) <= autoAttackRange && enemy != null)
+            {
+                oomo.pc.agent.SetDestination(transform.position);
+                targeted = false;
+            }
+            
         }
 
         if (autoReady == false)
