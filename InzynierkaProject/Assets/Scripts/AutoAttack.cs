@@ -90,7 +90,7 @@ public class AutoAttack : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcDealDamage(_bh, )
+    void RpcDealDamage()
     {
         if(isServer)
         {
