@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a199e17e9edae3b4ba3305dd85f7cefc, type: 3}
-  m_Name: Spell
+  m_Name: Archer Q - better attack speed
   m_EditorClassIdentifier: 
   spellName: 
   description: 

@@ -38,12 +38,6 @@ namespace MatchUp.Examples.Basic
             matchUp.onLostConnectionToMatchmakingServer = OnLostConnectionToMatchmakingServer;
         }
 
-        public void Start()
-        {
-            if(isServer)
-                StartCoroutine(OdpalSerwer());
-        }
-
         // If connection to the matchmaking server is lost then shutdown the host or client
         private void OnLostConnectionToMatchmakingServer(Exception e)
         {

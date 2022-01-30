@@ -22,14 +22,17 @@ public class ChampionClass : NetworkBehaviour
 
     private SendShop _sendShop;
 
+    public ClassManager cm;
+
     [SerializeField]
     private bool notSet = true;
 
     public void OnTriggerEnter(Collider other)
     {
-
+        
         if (other.GetComponent<NetworkIdentity>().isLocalPlayer || other.GetComponent<NetworkIdentity>().isServer)
         {
+            cm = other.GetComponent<ClassManager>();
             if (other.gameObject.tag == myTeam)
             {
                 other.TryGetComponent<SendShop>(out _sendShop);
@@ -77,6 +80,7 @@ public class ChampionClass : NetworkBehaviour
 
     public void ChangeClassToArcher()
     {
+        cm.SetClass(1);
         classOfPlayer = "Archer";
         _sendShop.choosenClass.sprite = Archer;
         if (isLocalPlayer || isServer)
@@ -106,6 +110,7 @@ public class ChampionClass : NetworkBehaviour
         _sendShop.archer.interactable = false;
         _sendShop.warrior.interactable = false;
         _sendShop.support.interactable = false;
+
     }
 
     public void ChangeClassToSupport()

@@ -92,16 +92,13 @@ public class AutoAttack : NetworkBehaviour
     [ClientRpc]
     void RpcDealDamage()
     {
-        if(isServer)
+        _bh.LoseHp(autoAttackDamage + _playerBh.attackBoost, gameObject);
+        if (isProjectile == true)
         {
-            _bh.LoseHp(autoAttackDamage + _playerBh.attackBoost, gameObject);
-            if (isProjectile == true)
-            {
-                var prefabProjectile = (GameObject)Instantiate(projectile, gameObject.transform, false);
-                prefabProjectile.GetComponent<ProjectileAnimation>().starter = gameObject;
-                prefabProjectile.GetComponent<ProjectileAnimation>().target = enemy;
-                NetworkServer.Spawn(prefabProjectile);
-            }
+            var prefabProjectile = (GameObject)Instantiate(projectile, gameObject.transform, false);
+            prefabProjectile.GetComponent<ProjectileAnimation>().starter = gameObject;
+            prefabProjectile.GetComponent<ProjectileAnimation>().target = enemy;
+            NetworkServer.Spawn(prefabProjectile);
         }
     }
 }

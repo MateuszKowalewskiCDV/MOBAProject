@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 6a9d08cb6f0026e409359b7f7bca7524, type: 3}
   m_Name: Starter
-  m_EditorClassIdentifier: Assembly-CSharp::Class
+  m_EditorClassIdentifier: 
   className: Starter
   sprite: {fileID: 0}
-  hpRaise: 20
+  hpRaise: 0
   attackSpeedRaise: 0
-  damageRaise: 10
+  damageRaise: 0
   range: 0
-  QSpell: {fileID: 0}
-  WSpell: {fileID: 0}
-  ESpell: {fileID: 0}
-  RSpell: {fileID: 0}
+  QSpell: {fileID: 11400000, guid: f64b67329511eb54c893a3f5b8dffd88, type: 2}
+  WSpell: {fileID: 11400000, guid: faa84162f989f0f4db2e46a4a822e4f2, type: 2}
+  ESpell: {fileID: 11400000, guid: f64b67329511eb54c893a3f5b8dffd88, type: 2}
+  RSpell: {fileID: 11400000, guid: b3a0cdfe28440a4479870b3c13c2f1d4, type: 2}

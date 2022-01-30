@@ -117,11 +117,8 @@ public class BeingHP : NetworkBehaviour
         }
     }
 
-    [ClientRpc]
     public void LoseHp(int loss, GameObject ownerOfAttack)
     {
-        if (!isServer) return;
-
         actualHp -= loss;
         _hpIndicator.text = actualHp.ToString();
 
@@ -138,8 +135,11 @@ public class BeingHP : NetworkBehaviour
                     playerLevel.AddExp(_mob.expValue, ownerOfAttack);
                 }
             }
-             
-            StartCoroutine(Respawn());
+            
+            if(isServer)
+            {
+                StartCoroutine(Respawn());
+            }
         }
 
         ShowHpToPlayersSwitch(loss);

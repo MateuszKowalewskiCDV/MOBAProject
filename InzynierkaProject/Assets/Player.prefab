@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 1880511088420064763}
   - component: {fileID: 3575687302622042421}
   - component: {fileID: 797050492405785024}
+  - component: {fileID: 3732049774748394457}
   - component: {fileID: 1738808960174445353}
   - component: {fileID: 1545965377204193173}
   - component: {fileID: 929357128950799776}
@@ -31,6 +32,7 @@ GameObject:
   - component: {fileID: 6716889813635555890}
   - component: {fileID: 3175902829489806697}
   - component: {fileID: 7152336000679945842}
+  - component: {fileID: 4430772729183962581}
   m_Layer: 8
   m_Name: Player
   m_TagString: RedTeam
@@ -298,6 +300,25 @@ MonoBehaviour:
   compressRotation: 0
   interpolateScale: 1
   syncScale: 1
+--- !u!114 &3732049774748394457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131501495401080656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25cbea21a08e4ac4d955bf4495f5519e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _prefabSkill: {fileID: 0}
+  _indicator: {fileID: 0}
+  _abilityKey: 101
+  _skill: {fileID: 11400000, guid: f64b67329511eb54c893a3f5b8dffd88, type: 2}
+  cooldownReady: 0
 --- !u!114 &1738808960174445353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -492,6 +513,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cnv: {fileID: 6616731126568333430}
+--- !u!114 &4430772729183962581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131501495401080656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f4d852af8914054babfb0860943e363, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  classOfPlayer: {fileID: 0}
+  classOfPlayerChoose: 0
+  availableClasses:
+  - {fileID: 11400000, guid: cf2852c29ae7a8d4483ec4f7c63c95ca, type: 2}
+  - {fileID: 11400000, guid: 7d8ef644d4ac05e41939af6516d3680d, type: 2}
+  - {fileID: 11400000, guid: 023b3fc32607099409278d8b9576585b, type: 2}
+  - {fileID: 11400000, guid: 4aa0fcf2608d611458f681ba62dda791, type: 2}
+  - {fileID: 11400000, guid: 2a60f0afa8518e4449e46a09acd0636a, type: 2}
+  q: {fileID: 1700618174992298854}
+  w: {fileID: 6481312320824254829}
+  e: {fileID: 6154589553429148157}
+  r: {fileID: 2654313523648322154}
+  qUsage: {fileID: 3732049774748394457}
+  wUsage: {fileID: 1545965377204193173}
+  eUsage: {fileID: 3732049774748394457}
+  rUsage: {fileID: 929357128950799776}
 --- !u!1 &151426662502311143
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,7 +1044,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -31.3, y: 27}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5201450129009908503
@@ -1035,8 +1084,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1053,8 +1102,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 80
+  m_fontSizeBase: 80
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3943,6 +3992,7 @@ GameObject:
   - component: {fileID: 1813539212438681658}
   - component: {fileID: 8113608451020694411}
   - component: {fileID: 5743329223754248539}
+  - component: {fileID: 6154589553429148157}
   m_Layer: 5
   m_Name: Skill3
   m_TagString: Untagged
@@ -4011,6 +4061,30 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6154589553429148157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5626184026004710602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01921a1db822c794b8e4363e86bad04f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tipWindow: {fileID: 7335258850525568293}
+  _imageSplash: {fileID: 1483743091082667402}
+  _image: {fileID: 8264037176519159909}
+  _imageBg: {fileID: 752064284990684268}
+  _skillDescription: {fileID: 5057829607371739420}
+  _skillManaCost: {fileID: 166349716005808592}
+  skillCooldown: {fileID: 8166622408182550176}
+  _actualCooldown: {fileID: 3646486997530168312}
+  spell: {fileID: 11400000, guid: f64b67329511eb54c893a3f5b8dffd88, type: 2}
+  _sklUsg: {fileID: 3732049774748394457}
+  timer: 0
+  _nt: {fileID: 131501495401080663}
 --- !u!1 &5639487588740740337
 GameObject:
   m_ObjectHideFlags: 0
@@ -4201,7 +4275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

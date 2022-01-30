@@ -9,16 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 6a9d08cb6f0026e409359b7f7bca7524, type: 3}
   m_Name: Mage
-  m_EditorClassIdentifier: Assembly-CSharp::Class
-  className: Mage
-  sprite: {fileID: 21300000, guid: f87374670eb97d04aaa937adc7a76967, type: 3}
-  hpRaise: 50
+  m_EditorClassIdentifier: 
+  className: 
+  sprite: {fileID: 0}
+  hpRaise: 0
   attackSpeedRaise: 0
-  damageRaise: 50
+  damageRaise: 0
   range: 0
-  QSpell: {fileID: 11400000, guid: f64b67329511eb54c893a3f5b8dffd88, type: 2}
+  QSpell: {fileID: 0}
   WSpell: {fileID: 0}
   ESpell: {fileID: 0}
   RSpell: {fileID: 0}

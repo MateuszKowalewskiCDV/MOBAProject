@@ -9,8 +9,8 @@ public class SkillUsage : NetworkBehaviour
 
     [SerializeField]
     private KeyCode _abilityKey;
-    [SerializeField]
-    private Spell _skill;
+
+    public Spell _skill;
 
     private Vector3 velocity;
 
