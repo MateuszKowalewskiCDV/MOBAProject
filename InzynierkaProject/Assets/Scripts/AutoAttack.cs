@@ -5,7 +5,7 @@ using Mirror;
 
 public class AutoAttack : NetworkBehaviour
 {
-    public float autoattackSpeed;
+    public float autoAttackSpeed;
     public int autoAttackDamage;
     public float autoAttackRange;
     public OutlineOnMouseOver oomo;
@@ -75,7 +75,7 @@ public class AutoAttack : NetworkBehaviour
             if (oomo._isChoosen == true && _bh.isAlive && Vector3.Distance(oomo.gameObject.transform.position, gameObject.transform.position) <= autoAttackRange)
             {
                 CmdDealDamage();
-                timer = autoattackSpeed;
+                timer = autoAttackSpeed;
                 autoReady = false;
             }
         }

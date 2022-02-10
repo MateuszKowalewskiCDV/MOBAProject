@@ -148,7 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  autoattackSpeed: 0.5
+  autoAttackSpeed: 0.5
   autoAttackDamage: 20
   autoAttackRange: 8
   oomo: {fileID: 0}

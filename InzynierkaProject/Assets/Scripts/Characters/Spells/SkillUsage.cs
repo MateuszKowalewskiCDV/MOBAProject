@@ -128,7 +128,10 @@ public class SkillUsage : NetworkBehaviour
             _prefabSkillInstance.GetComponent<AuraShard>()._spell = _skill;
             _prefabSkillInstance.GetComponent<AuraShard>().ownerOfAttack = gameObject;
         }
-
+        if (_skill.spellName == "Quick Shooter")
+        {
+            _prefabSkillInstance.GetComponent<AttackSpeed>()._spell = _skill;
+        }
     }
 
     [Command]
