@@ -1,0 +1,89 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using TMPro;
+using Mirror;
+
+public class HoverTip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+{
+    [SerializeField]
+    private GameObject _tipWindow;
+
+    [SerializeField]
+    private Image _imageSplash, _image, _imageBg;
+
+    [SerializeField]
+    private TextMeshProUGUI _skillDescription, _skillManaCost, skillCooldown, _actualCooldown;
+
+    public Spell spell;
+    private Spell spellHolder;
+
+    [SerializeField]
+    private SkillUsage _sklUsg;
+
+    public float timer;
+    public NetworkIdentity _nt;
+
+    void Start()
+    {
+        spellHolder = spell;
+        if (_nt.isLocalPlayer)
+        {
+            _imageSplash.sprite = spell.sprite;
+            _imageBg.sprite = spell.sprite;
+        }
+    }
+
+    void Update()
+    {
+        if(spellHolder != spell)
+        {
+            spellHolder = spell;
+            _actualCooldown.text = null;
+            _imageSplash.fillAmount = 1;
+            _imageSplash.sprite = spell.sprite;
+            _imageBg.sprite = spell.sprite;
+            timer = 0;
+        }
+        if(_nt.isLocalPlayer)
+        {
+            if (_sklUsg.cooldownReady == false)
+            {
+                if (timer <= 0)
+                {
+                    timer = spell.cooldown;
+                }
+                _actualCooldown.text = Mathf.Round(timer).ToString();
+                timer -= Time.deltaTime;
+                _imageSplash.fillAmount = timer / spell.cooldown;
+            }
+            else
+            {
+                _actualCooldown.text = null;
+                _imageSplash.fillAmount = 1;
+            }
+        }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if(_nt.isLocalPlayer)
+        {
+            _tipWindow.SetActive(true);
+            _image.sprite = spell.sprite;
+            _skillDescription.text = spell.description;
+            _skillManaCost.text = spell.manaCost.ToString();
+            skillCooldown.text = spell.cooldown.ToString();
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if(_nt.isLocalPlayer)
+        {
+            _tipWindow.SetActive(false);
+        }
+    }
+}

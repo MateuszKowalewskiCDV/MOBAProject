@@ -10,6 +10,8 @@ public class PlayerController : NetworkBehaviour
     private Camera cam;
 
     public NavMeshAgent agent;
+    public BellInteraction bell;
+    public float bellDistance;
 
     [SerializeField]
     private Rigidbody _rb;
@@ -20,6 +22,7 @@ public class PlayerController : NetworkBehaviour
 
     void Start()
     {
+        bell = FindObjectOfType<BellInteraction>();
         aa = GetComponent<AutoAttack>();
         if(isLocalPlayer)
         {
@@ -46,6 +49,12 @@ public class PlayerController : NetworkBehaviour
             if(Physics.Raycast(ray, out hit) && !hit.transform.gameObject.CompareTag("Enemy"))
             {
                 agent.SetDestination(hit.point);
+            }
+
+            if(Physics.Raycast(ray, out hit) && hit.transform.gameObject.CompareTag("Bell"))
+            {
+                if(Vector3.Distance(bell.gameObject.transform.position, transform.position) <= bellDistance)
+                    bell.PlayBell(gameObject.tag);
             }
         }
     }

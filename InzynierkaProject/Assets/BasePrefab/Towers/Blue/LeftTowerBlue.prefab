@@ -235,9 +235,11 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   team1: RedTeam
-  team2: BlueTeam
+  team2: YellowTeam
   team3: GreenTeam
+  teamWithBell: 
   projectile: {fileID: 4956794062884463092}
+  bellState: {fileID: 0}
 --- !u!65 &8402467720170645654
 BoxCollider:
   m_ObjectHideFlags: 0

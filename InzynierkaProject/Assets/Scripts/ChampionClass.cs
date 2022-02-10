@@ -92,6 +92,7 @@ public class ChampionClass : NetworkBehaviour
 
     public void ChangeClassToWarrior()
     {
+        cm.SetClass(3);
         classOfPlayer = "Warrior";
         _sendShop.choosenClass.sprite = Warrior;
         if (isLocalPlayer || isServer)
@@ -103,6 +104,7 @@ public class ChampionClass : NetworkBehaviour
 
     public void ChangeClassToMage()
     {
+        cm.SetClass(2);
         classOfPlayer = "Mage";
         _sendShop.choosenClass.sprite = Mage;
         if (isLocalPlayer || isServer)
@@ -110,11 +112,11 @@ public class ChampionClass : NetworkBehaviour
         _sendShop.archer.interactable = false;
         _sendShop.warrior.interactable = false;
         _sendShop.support.interactable = false;
-
     }
 
     public void ChangeClassToSupport()
     {
+        cm.SetClass(4);
         classOfPlayer = "Support";
         _sendShop.choosenClass.sprite = Support;
         if (isLocalPlayer || isServer)

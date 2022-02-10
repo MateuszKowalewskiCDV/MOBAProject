@@ -11,20 +11,20 @@ GameObject:
   - component: {fileID: 131501495401080664}
   - component: {fileID: 131501495401080667}
   - component: {fileID: 131501495401080666}
+  - component: {fileID: 131501495401080657}
   - component: {fileID: 131501495401080661}
   - component: {fileID: 1376607727731024358}
   - component: {fileID: 131501495401080660}
   - component: {fileID: 131501495401080663}
   - component: {fileID: 131501495401080662}
-  - component: {fileID: 131501495401080657}
   - component: {fileID: 5062334263613802591}
   - component: {fileID: 1880511088420064763}
   - component: {fileID: 3575687302622042421}
   - component: {fileID: 797050492405785024}
-  - component: {fileID: 3732049774748394457}
-  - component: {fileID: 1738808960174445353}
-  - component: {fileID: 1545965377204193173}
   - component: {fileID: 929357128950799776}
+  - component: {fileID: 3732049774748394457}
+  - component: {fileID: 1545965377204193173}
+  - component: {fileID: 1738808960174445353}
   - component: {fileID: 5929766157910421773}
   - component: {fileID: 7507283177220313149}
   - component: {fileID: 9217865474680557751}
@@ -104,6 +104,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!54 &131501495401080657
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131501495401080656}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 4
+  m_CollisionDetection: 3
 --- !u!136 &131501495401080661
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -158,6 +174,8 @@ MonoBehaviour:
   syncInterval: 0.1
   cam: {fileID: 0}
   agent: {fileID: 131501495401080662}
+  bell: {fileID: 0}
+  bellDistance: 5
   _rb: {fileID: 131501495401080657}
   movementIndicator: {fileID: 8743339699296722258, guid: 5bcd632279a9d5045b7cf3bd264d72b6, type: 3}
   aa: {fileID: 1376607727731024358}
@@ -200,22 +218,6 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!54 &131501495401080657
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 131501495401080656}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 4
-  m_CollisionDetection: 1
 --- !u!114 &5062334263613802591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,6 +244,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  am: {fileID: 0}
   attackBoost: 0
   _holder: {fileID: 6170823354948080819}
   _hpIndicator: {fileID: 7009713956412489552}
@@ -250,6 +253,10 @@ MonoBehaviour:
   _manaBar: {fileID: 3537658064161215835}
   maxHp: 200
   maxMana: 100
+  speed: 5
+  myTeamColor: 
+  smr: {fileID: 0}
+  mr: {fileID: 0}
   actualHp: 0
   actualMana: 0
   _hpRegen: 10
@@ -300,6 +307,26 @@ MonoBehaviour:
   compressRotation: 0
   interpolateScale: 1
   syncScale: 1
+--- !u!114 &929357128950799776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131501495401080656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25cbea21a08e4ac4d955bf4495f5519e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _prefabSkill: {fileID: 0}
+  _indicator: {fileID: 0}
+  _abilityKey: 114
+  spellHolder: {fileID: 11400000, guid: b3a0cdfe28440a4479870b3c13c2f1d4, type: 2}
+  _skill: {fileID: 11400000, guid: b3a0cdfe28440a4479870b3c13c2f1d4, type: 2}
+  cooldownReady: 0
 --- !u!114 &3732049774748394457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,25 +344,7 @@ MonoBehaviour:
   _prefabSkill: {fileID: 0}
   _indicator: {fileID: 0}
   _abilityKey: 101
-  _skill: {fileID: 11400000, guid: f64b67329511eb54c893a3f5b8dffd88, type: 2}
-  cooldownReady: 0
---- !u!114 &1738808960174445353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 131501495401080656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25cbea21a08e4ac4d955bf4495f5519e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  _prefabSkill: {fileID: 0}
-  _indicator: {fileID: 0}
-  _abilityKey: 113
+  spellHolder: {fileID: 11400000, guid: f64b67329511eb54c893a3f5b8dffd88, type: 2}
   _skill: {fileID: 11400000, guid: f64b67329511eb54c893a3f5b8dffd88, type: 2}
   cooldownReady: 0
 --- !u!114 &1545965377204193173
@@ -355,9 +364,10 @@ MonoBehaviour:
   _prefabSkill: {fileID: 0}
   _indicator: {fileID: 0}
   _abilityKey: 119
+  spellHolder: {fileID: 11400000, guid: faa84162f989f0f4db2e46a4a822e4f2, type: 2}
   _skill: {fileID: 11400000, guid: faa84162f989f0f4db2e46a4a822e4f2, type: 2}
   cooldownReady: 0
---- !u!114 &929357128950799776
+--- !u!114 &1738808960174445353
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -373,8 +383,9 @@ MonoBehaviour:
   syncInterval: 0.1
   _prefabSkill: {fileID: 0}
   _indicator: {fileID: 0}
-  _abilityKey: 114
-  _skill: {fileID: 11400000, guid: b3a0cdfe28440a4479870b3c13c2f1d4, type: 2}
+  _abilityKey: 113
+  spellHolder: {fileID: 11400000, guid: f64b67329511eb54c893a3f5b8dffd88, type: 2}
+  _skill: {fileID: 11400000, guid: f64b67329511eb54c893a3f5b8dffd88, type: 2}
   cooldownReady: 0
 --- !u!114 &5929766157910421773
 MonoBehaviour:
@@ -525,7 +536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f4d852af8914054babfb0860943e363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  classOfPlayer: {fileID: 0}
+  classOfPlayer: {fileID: 11400000, guid: cf2852c29ae7a8d4483ec4f7c63c95ca, type: 2}
   classOfPlayerChoose: 0
   availableClasses:
   - {fileID: 11400000, guid: cf2852c29ae7a8d4483ec4f7c63c95ca, type: 2}
@@ -537,7 +548,7 @@ MonoBehaviour:
   w: {fileID: 6481312320824254829}
   e: {fileID: 6154589553429148157}
   r: {fileID: 2654313523648322154}
-  qUsage: {fileID: 3732049774748394457}
+  qUsage: {fileID: 1738808960174445353}
   wUsage: {fileID: 1545965377204193173}
   eUsage: {fileID: 3732049774748394457}
   rUsage: {fileID: 929357128950799776}
@@ -865,8 +876,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
-  m_fontSizeBase: 80
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1102,8 +1113,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
-  m_fontSizeBase: 80
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1270,8 +1281,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
-  m_fontSizeBase: 80
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3059,8 +3070,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
-  m_fontSizeBase: 80
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3991,7 +4002,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1813539212438681658}
   - component: {fileID: 8113608451020694411}
-  - component: {fileID: 5743329223754248539}
   - component: {fileID: 6154589553429148157}
   m_Layer: 5
   m_Name: Skill3
@@ -4031,36 +4041,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5626184026004710602}
   m_CullTransparentMesh: 0
---- !u!114 &5743329223754248539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5626184026004710602}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.19215687, g: 0.19215687, b: 0.19215687, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &6154589553429148157
 MonoBehaviour:
   m_ObjectHideFlags: 0

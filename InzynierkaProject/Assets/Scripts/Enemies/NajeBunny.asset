@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31212a07a2ab3254a81ea15a91dfc28f, type: 3}
+  m_Name: NajeBunny
+  m_EditorClassIdentifier: 
+  enemyName: NajeBunny
+  description: Wiecznie NajeBunny
+  hp: 200
+  mana: 0
+  spawnTime: 30
+  sprite: {fileID: 0}
+  speed: 10
+  damage: 10
+  attackSpeed: 0.5
+  range: 0.5
+  followRange: 15
+  expValue: 100
+  enemyPrefab: {fileID: 3640999784415473328, guid: b8c1bcb112a78be44bac8f9b7598432b, type: 3}

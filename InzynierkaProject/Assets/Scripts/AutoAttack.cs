@@ -38,6 +38,7 @@ public class AutoAttack : NetworkBehaviour
                     oomo = hit.transform.gameObject.GetComponentInChildren<OutlineOnMouseOver>();
                     oomo.pc = GetComponent<PlayerController>();
                     _bh = oomo.GetComponent<BeingHP>();
+
                     if (Vector3.Distance(transform.position, enemy.transform.position) <= autoAttackRange && enemy != null)
                     {
                         oomo.pc.agent.SetDestination(transform.position);

@@ -25,6 +25,10 @@ public class EnemyAttack : NetworkBehaviour
 
     private bool _playerInside = false;
 
+    public Animator animationState;
+
+    private bool onMyWayBack;
+
 
     void Start()
     {
@@ -49,6 +53,14 @@ public class EnemyAttack : NetworkBehaviour
         {
             _attackedIndicator.sprite = _angry;
         }
+        if(onMyWayBack)
+        {
+            if(Vector3.Distance(_startingPoint, transform.position) < 3f)
+            {
+                animationState.SetInteger("AnimationState", 0);
+                onMyWayBack = false;
+            }
+        }
     }
 
     void OnTriggerStay(Collider other)
@@ -58,19 +70,22 @@ public class EnemyAttack : NetworkBehaviour
                 if (_targetedPlayer == null || Vector3.Distance(transform.position, other.gameObject.transform.position) < Vector3.Distance(transform.position, _targetedPlayer.transform.position))
                 {
                     _targetedPlayer = other.transform;
+                    
                 }
 
                 if (Mathf.Floor(Vector3.Distance(_targetedPlayer.position, gameObject.transform.position)) >= _mob.range)
                 {
                     _playerInside = true;
-
-                    if(isServer)
+                    animationState.SetInteger("AnimationState", 1);
+                if (isServer)
                         RpcGoToPlayer(_targetedPlayer.gameObject);
                     else
                         CmdGoToPlayer(_targetedPlayer.gameObject);
                 }
                 else
                 {
+                    transform.LookAt(other.transform);
+                    animationState.SetInteger("AnimationState", 2);
                     if (isServer)
                         RpcAttack(_targetedPlayer, gameObject);
                     else
@@ -93,6 +108,7 @@ public class EnemyAttack : NetworkBehaviour
             if (other.CompareTag("RedTeam") || other.CompareTag("BlueTeam") || other.CompareTag("GreenTeam") || other.CompareTag("YellowTeam"))
             {
                 _playerInside = false;
+                animationState.SetInteger("AnimationState", 1);
             }
 
             if (isServer)
@@ -101,13 +117,11 @@ public class EnemyAttack : NetworkBehaviour
                 CmdGoBack();
     }
 
-    [Command]
     void CmdGoToPlayer(GameObject player)
     {
         RpcGoToPlayer(player);
     }
 
-    [ClientRpc]
     void RpcGoToPlayer(GameObject player)
     {
         _attackedIndicator.sprite = _angry;
@@ -124,13 +138,11 @@ public class EnemyAttack : NetworkBehaviour
         }
     }
 
-    [Command]
     void CmdAttack(Transform player, GameObject owner)
     {
         RpcAttack(player, owner);
     }
 
-    [ClientRpc]
     void RpcAttack(Transform player, GameObject owner)
     {
         _timer += Time.deltaTime;
@@ -146,26 +158,24 @@ public class EnemyAttack : NetworkBehaviour
             _mobAgent.ResetPath();
     }
 
-    [ClientRpc]
     void DealDamageToPlayer(GameObject player, GameObject owner)
     {
         if(isServer)
             player.gameObject.GetComponent<BeingHP>().LoseHp(_mob.damage, owner);
     }
 
-    [Command]
     void CmdGoBack()
     {
         RpcGoBack();
     }
 
-    [ClientRpc]
     void RpcGoBack()
     {
         if(isServer)
         {
             if (!_bh.isAttacked == true)
             {
+                onMyWayBack = true;
                 _mobAgent.SetDestination(_startingPoint);
                 _bh.RPCHpColor();
                 _bh.HealUp();

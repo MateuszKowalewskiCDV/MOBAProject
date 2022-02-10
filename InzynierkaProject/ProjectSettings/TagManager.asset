@@ -15,6 +15,9 @@ TagManager:
   - BlueTeam
   - GreenTeam
   - YellowTeam
+  - Bell
+  - noTeam
+  - Buff
   layers:
   - Default
   - TransparentFX
@@ -37,8 +40,8 @@ TagManager:
   - BlueTeam
   - GreenTeam
   - YellowTeam
-  - 
-  - 
+  - Buff
+  - Enemy
   - 
   - 
   - 
