@@ -363,6 +363,8 @@ MonoBehaviour:
   myTeamColor: 
   smr: {fileID: 2680711551504502804}
   mr: {fileID: 0}
+  smrModel: 1
+  mrModel: 0
   actualHp: 2000
   actualMana: 0
   _hpRegen: 1

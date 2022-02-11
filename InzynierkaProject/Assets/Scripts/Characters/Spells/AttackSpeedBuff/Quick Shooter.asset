@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a199e17e9edae3b4ba3305dd85f7cefc, type: 3}
-  m_Name: Archer Q - better attack speed
+  m_Name: Quick Shooter
   m_EditorClassIdentifier: 
-  spellName: 
-  description: 
+  spellName: Quick Shooter
+  description: Your auto attack speed x2
   manaCost: 0
-  cooldown: 0
-  sprite: {fileID: 0}
-  skillType: 
+  cooldown: 10
+  sprite: {fileID: 21300000, guid: 6c50d8b67d71d0446995a0ce24b4a5e8, type: 3}
+  skillType: buff
   speed: 0
   damage: 0
   range: 0
   castableOnAlly: 0
-  buffValue: 0
-  duration: 0
-  spellPrefab: {fileID: 0}
-  indicator: {fileID: 0}
+  buffValue: 2
+  duration: 8
+  spellPrefab: {fileID: 7313651892512455151, guid: 388613d2ec92267428dbc37618f8d460, type: 3}
+  indicator: {fileID: 1169168458513570279, guid: 17da737d2e8fe3e4da44d1cf8f06d012, type: 3}

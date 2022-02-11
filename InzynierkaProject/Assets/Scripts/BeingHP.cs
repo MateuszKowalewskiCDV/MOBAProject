@@ -21,7 +21,8 @@ public class BeingHP : NetworkBehaviour
     public string myTeamColor;
 
     public SkinnedMeshRenderer smr;
-    public MeshRenderer mr;
+    public MeshRenderer[] mr;
+    public bool smrModel, mrModel;
 
     [SyncVar]
     public int actualHp;
@@ -71,6 +72,7 @@ public class BeingHP : NetworkBehaviour
             _hpBar.transform.localScale = new Vector3(0.08f / maxHp * actualHp, _hpBar.transform.localScale.y, _hpBar.transform.localScale.z);
             _navMeshAgent = GetComponent<NavMeshAgent>();
             _navMeshAgent.speed = speed;
+            mobRespawnTime = _mob.spawnTime;
         }
         else if(_isNexus)
         {
@@ -268,7 +270,15 @@ public class BeingHP : NetworkBehaviour
         isAlive = false;
         gameObject.transform.position = _startingPosition;
         _navMeshAgent.enabled = false;
-        smr.enabled = false;
+        if (smrModel == true)
+            smr.enabled = false;
+        if (mrModel == true)
+        {
+            for (int i = 2; i >= 0; i--)
+            {
+                mr[i].enabled = false;
+            }
+        }
         GetComponent<BeingHP>().enabled = false;
         GetComponent<EnemyAttack>().enabled = false;
         GetComponent<CapsuleCollider>().enabled = false;
@@ -281,7 +291,15 @@ public class BeingHP : NetworkBehaviour
         _holder.SetActive(true);
         _navMeshAgent.enabled = true;
         GetComponent<CapsuleCollider>().enabled = true;
-        smr.enabled = true;
+        if (smrModel == true)
+            smr.enabled = false;
+        if (mrModel == true)
+        {
+            for (int i = 2; i >= 0; i--)
+            {
+                mr[i].enabled = true;
+            }
+        }
         GetComponent<BeingHP>().enabled = true;
         actualHp = maxHp;
         GetComponent<EnemyAttack>().enabled = true;

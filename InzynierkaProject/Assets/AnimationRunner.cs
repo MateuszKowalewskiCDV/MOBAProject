@@ -8,6 +8,8 @@ public class AnimationRunner : MonoBehaviour
     public int speed;
     public GameObject legLeft, legRight;
     public bool attackCheck;
+    public Transform parent;
+    public GameObject bite;
 
     public void Start()
     {
@@ -18,8 +20,8 @@ public class AnimationRunner : MonoBehaviour
     {
         if (anim.GetInteger("AnimationState") == 0)
         {
-            legLeft.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
-            legRight.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            legLeft.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f + parent.transform.rotation.z);
+            legRight.transform.localRotation = Quaternion.Euler(90f, 0f, 0f + parent.transform.rotation.z);
         }
 
         if (anim.GetInteger("AnimationState") == 1)
@@ -33,7 +35,7 @@ public class AnimationRunner : MonoBehaviour
             if(attackCheck == true)
             {
                 attackCheck = false;
-                StartCoroutine(Attack());
+                Instantiate(bite);
             }
         }
 
@@ -50,11 +52,11 @@ public class AnimationRunner : MonoBehaviour
     IEnumerator Attack()
     {
         yield return new WaitForSeconds(1f);
-        legLeft.transform.rotation = Quaternion.Euler(180f, 0f, 0f);
-        legRight.transform.rotation = Quaternion.Euler(360f, 0f, 0f);
+        legLeft.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
+        legRight.transform.localRotation = Quaternion.Euler(360f, 0f, 0f);
         yield return new WaitForSeconds(0.2f);
-        legLeft.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
-        legRight.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+        legLeft.transform.localRotation = Quaternion.Euler(-90f, 0f, 0f);
+        legRight.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
         attackCheck = true;
     }
 }
